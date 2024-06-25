@@ -1,7 +1,8 @@
 <script>
-import "../app.css";
+    import "../app.css";
     import Footer from "../components/Footer.svelte";
     import Header from "../components/Header.svelte";
+    import ViewTransition from "./navigation.svelte";
 
     let y;
     let innerHeight = 0;
@@ -19,6 +20,7 @@ import "../app.css";
             <i class="fa-solid fa-arrow-up"/>
         </button>
     </div>
+    <ViewTransition/>
     <!-- Inserts Header element onto the page -->
     <Header y={y}/>
     <slot />
