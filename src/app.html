@@ -19,11 +19,11 @@
 	</head>
 	<body data-sveltekit-preload-data="hover" class="bg-backgroundBlue text-white relative">
 		<div style="display: contents" class="relative z-[1]">%sveltekit.body%</div>
-		<div class="absolute min-h-screen top-0 left-0 w-full z-[-1] opacity-70">
+		<div class="absolute h-full top-0 left-0 w-full z-[-1] opacity-70">
 			<div class="absolute inset-0" id="particles-js"></div>
 		</div>
 		<script>
-			particlesJS.load('particles-js', 'assets/particlesjs-config.json', function() {
+			particlesJS.load('particles-js', "assets/particlesjs-config.json", function() {
 				console.log('Callback: particlesjs-config.json loaded')
 			})
 		</script>

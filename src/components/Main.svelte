@@ -5,7 +5,7 @@
     let steps = [
         {name: 'This Website', icon: 'fa-solid fa-globe'},
         {name: 'Websocket Auction', icon: 'fa-solid fa-network-wired'},
-        {name: 'Custom Wordle', icon: 'fa-solid fa-puzzle-piece'},
+        {name: 'Custom Wordle', icon: 'fa-solid fa-puzzle-piece', href: "game"},
     ]
 </script>
 
@@ -18,7 +18,7 @@
             <p class="text-base sm:text-lg md:text-xl">
                 I am a student at <span class="text-purple-700">Kansas State University</span>. Here you can read about some of the things that I'm doing!
             </p>
-            <a href="#" target="_blank" class="customShadow mx-auto lg:mr-auto text-base sm:text-lg md:text-xl poppins relative overflow-hidden px-6 py-3 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 cursor-pointer">
+            <a href="#" target="_blank" class="customShadow mx-auto lg:mr-auto lg:ml-0 text-base sm:text-lg md:text-xl poppins relative overflow-hidden px-6 py-3 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 cursor-pointer">
                 <h4 class="relative z-9">Contact me &rarr;</h4>
             </a>
         </div>
@@ -37,11 +37,6 @@
                 Here's a snapshot of some of my favorite projects
             </h3>
         </div>
-        <a href="projects" class="mx-auto px-4 py-2 rounded-md border border-solid border-white flex items-center gap-2 -mb-0 sm:-mb-0 -mt-10
-        hover:border-blue-700 duration-200">
-        <p>See all of my projects here</p>
-        <i class="fa-solid fa-link"/>
-        </a>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-10">
             <Step step={steps[0]}>
                 <!--Anything here rendered in the slot in Step.svelte-->
@@ -60,6 +55,11 @@
                 Custom Wordle is my version of wordle where you can input a word of any length/validity and create a link that you can send to a friend. You can play it by clicking the link below.
             </Step>
         </div>
+        <a href="projects" class="mx-auto px-4 py-2 rounded-md border border-solid border-white flex items-center gap-2 -mb-0 sm:-mb-0 -mt-10
+        hover:border-blue-700 duration-200">
+            <p>See all of my projects here</p>
+            <i class="fa-solid fa-link"/>
+        </a>
     </section>
 
     <section id="about" class="py-20 pt-10 lg:py-32 flex flex-col gap-16 sm:gap-20 md:gap-24 relative">
