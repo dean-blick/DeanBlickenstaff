@@ -3,8 +3,8 @@
 
 
     let steps = [
-        {name: 'This Website', icon: 'fa-solid fa-globe'},
-        {name: 'Websocket Auction', icon: 'fa-solid fa-network-wired'},
+        {name: 'This Website', icon: 'fa-solid fa-globe', href: "projects"},
+        {name: 'Websocket Auction', icon: 'fa-solid fa-network-wired', href: "projects"},
         {name: 'Custom Wordle', icon: 'fa-solid fa-puzzle-piece', href: "game"},
     ]
 </script>
@@ -42,7 +42,7 @@
                 <!--Anything here rendered in the slot in Step.svelte-->
                 <p>
                     This website was made with <strong class="text-blue-500"> Svelte/SvelteKit, Tailwind, Particlesjs, & FontAwesome</strong>
-                    . I try to keep this site as up to date as possible. Click the link to see a full breakdown.
+                    . I try to keep this site as up to date as possible. Click the link to see more on the projects page.
                 </p>
             </Step>
             <Step step={steps[1]}>
@@ -52,7 +52,7 @@
                 </p>
             </Step>
             <Step step={steps[2]}>
-                Custom Wordle is my version of wordle where you can input a word of any length/validity and create a link that you can send to a friend. You can play it by clicking the link below.
+                Custom Wordle is my version of Wordle where you can input a word of any length/validity and create a link that you can send to a friend. Due to this and a harder wordlist, entries are not checked against a dictionary. You can play it by clicking the link below.
             </Step>
         </div>
         <a href="projects" class="mx-auto px-4 py-2 rounded-md border border-solid border-white flex items-center gap-2 -mb-0 sm:-mb-0 -mt-10
@@ -60,9 +60,5 @@
             <p>See all of my projects here</p>
             <i class="fa-solid fa-link"/>
         </a>
-    </section>
-
-    <section id="about" class="py-20 pt-10 lg:py-32 flex flex-col gap-16 sm:gap-20 md:gap-24 relative">
-
     </section>
 </main>

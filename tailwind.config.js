@@ -5,6 +5,9 @@ export default {
     extend: {
       colors: {
         'backgroundBlue': '#000113'
+      },
+      backdropBlur: {
+        xs: '2px',
       }
     }
   },
