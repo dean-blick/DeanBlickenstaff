@@ -2,6 +2,7 @@
 <script>
     import Line from "./gameLine.svelte"
     import wordsJSON from "../words.json"
+
     
     const words = wordsJSON.words;
     export let word = words[Math.round(Math.random()*words.length)]

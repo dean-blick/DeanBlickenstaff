@@ -7,7 +7,7 @@
         <p><b class="pr-3">Email</b>cdblickenstaff@gmail.com</p>
         <p>
             <b class="pr-2">GitHub</b>
-            <a href ="#" target ="_blank" class="text-blue-500">
+            <a href ="https://github.com/dean-blick" target ="_blank" class="text-blue-500">
                 dean-blick
                 <sup>
                     <span class="text-xs scale-75">
@@ -18,7 +18,7 @@
         </p>
         <p>
             <b class="pr-2">LinkedIn</b>
-            <a href ="#" target ="_blank" class="text-blue-500">
+            <a href ="https://www.linkedin.com/in/deanblickenstaff/" target ="_blank" class="text-blue-500">
                 deanblickenstaff
                 <sup>
                     <span class="text-xs scale-75">
