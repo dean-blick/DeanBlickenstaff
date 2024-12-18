@@ -18,7 +18,7 @@
     }
 
     function showLink(){
-        displayLink = "localhost:5173/gameWord/" + out
+        displayLink = "deanblickenstaff.pages.dev/gameWord/" + out
         buttonClicked = true
     }
 
