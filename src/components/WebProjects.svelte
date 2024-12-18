@@ -17,7 +17,7 @@
             <h class="py-4 font-semibold text-lg">To-Do List</h>
             <p>A classic</p>
         </div>
-        <div class="flex flex-col bg-black/30 backdrop-blur-sm w-full m-8 lg:w-1/2 items-center">
+        <div class="flex flex-col bg-black/30 backdrop-blur-sm w-full m-8 lg:w-1/2 items-center rounded-lg p-2">
             <ToDoList/>
         </div>
     </WebProjectItem>

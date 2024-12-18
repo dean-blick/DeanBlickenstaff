@@ -9,7 +9,6 @@
     function removeToDoItem(index){
         listItems.splice(index, 1);
         listItems = listItems;
-        console.log(index);
     }
 </script>
 <div class="overflow-y-auto w-full h-80 max-h-80 content-end flex flex-col-reverse">
