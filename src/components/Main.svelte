@@ -18,9 +18,11 @@
             <p class="text-base sm:text-lg md:text-xl">
                 I am a student at <span class="text-purple-700">Kansas State University</span>.
             </p>
+            <!--
             <a href="#" target="_blank" class="customShadow mx-auto lg:mr-auto lg:ml-0 text-base sm:text-lg md:text-xl poppins relative overflow-hidden px-6 py-3 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 cursor-pointer">
                 <h4 class="relative z-9">Contact me &rarr;</h4>
             </a>
+            -->
         </div>
         <div class="relative shadow-2xl grid place-items-center">
             <!-- <img src={"images/image.png"} alt="Image" class="object-cover z-[2] max-h-[70vh]"/> -->
