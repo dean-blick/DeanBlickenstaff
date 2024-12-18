@@ -55,13 +55,13 @@
                 <h4 class="relative z-9">See this project on GitHub</h4>
             </a>
         </div>
-        <ul class="w-1/3 min-w-80 mx-8 lg:mx-0 my-4 lg:my-0">
+        <ul class="w-80 lg:w-auto mx-8 lg:mx-0 my-4 lg:my-0">
             <h class="font-semibold text-lg">Skills utilized:</h>
             <li>Working with legacy code</li>
             <li>Reading technical documentation</li>
             <li>Working with peers/professional associates</li>
         </ul>
-        <ul class="w-1/3 min-w-80 mx-8 lg:mx-0 my-4 lg:my-0">
+        <ul class="w-80 lg:w-auto mx-8 lg:mx-0 my-4 lg:my-0">
             <h class="font-semibold text-lg">Technology utilized:</h>
             <li>WPF</li>
             <li>Event listening/invokes</li>
