@@ -1,6 +1,9 @@
 <script>
     import WebProjectItem from "./WebProjectItem.svelte";
     import ToDoList from "./ToDoList.svelte";
+    import FixedPopUp from "./FixedPopUp.svelte";
+    import AbsolutePopUp from "./AbsolutePopUp.svelte";
+
 </script>
 
 <div class="flex flex-col">
@@ -13,11 +16,23 @@
         </div>
     </WebProjectItem>
     <WebProjectItem>
-        <div class="flex flex-col w-full max-h-full overflow-auto min-w-80 items-center mb-10">
+        <div class="flex flex-col w-full max-h-full overflow-auto min-w-80 items-center mb-2">
             <h class="py-4 font-semibold text-lg">To-Do List</h>
             <p>A classic</p>
+            <FixedPopUp buttonText="See ideas reinforced" overlayHeader="Concepts/Ideas">
+                <div class="flex flex-col">
+                    <p>&#8226; Reactive list of objects containing a boolean and string</p>
+                    <p>&#8226; Accessing items in a list</p>
+                    <p>&#8226; CSS styling</p>
+                    <h1 class="py-4">From creating overlay:</h1>
+                    <p>&#8226; Svelte stores</p>
+                    <p>&#8226; Reusable Svelte components</p>
+                    <p>&#8226; Fixed and absolute positioning</p>
+                </div>
+            </FixedPopUp>
         </div>
-        <div class="flex flex-col bg-black/30 backdrop-blur-sm w-full m-8 lg:w-1/2 items-center rounded-lg p-2">
+        
+        <div class="flex flex-col bg-black/30 backdrop-blur-sm w-full m-8 lg:w-1/2 items-center rounded-lg p-2 z-0">
             <ToDoList/>
         </div>
     </WebProjectItem>

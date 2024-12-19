@@ -17,9 +17,16 @@
         <div class="flex flex-col w-1/2 max-h-full overflow-auto min-w-80">
             <h class="py-4 font-semibold text-lg">This Website</h>
             <p class="py-4">&emsp;I have a list of things I would like to accomplish while working on this website. I hope to learn a lot about front-end development, especially frameworks as they are becoming increasingly relevant.</p>
-            <a href="https://github.com/dean-blick/Website" target="_blank" class="mb-4 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center">
-                <h4 class="relative z-9">See this website on GitHub</h4>
-            </a>
+            <p class="py-4">&emsp;The Web-Projects page has various projects that I have done to increase my web development proficiency.</p>
+            <div class="flex flex-row justify-center">
+                <a href="https://github.com/dean-blick/Website" target="_blank" class="mr-4 mb-4 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center">
+                    <h4 class="relative z-9">See this website on GitHub</h4>
+                </a>
+                <a href="webProjects" class="mb-4 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center">
+                    <h4 class="relative z-9">See Web-Projects</h4>
+                </a>
+            </div>
+            
         </div>
         <MyList/>
     </ProjectItem>
