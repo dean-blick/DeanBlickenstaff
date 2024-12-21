@@ -30,5 +30,5 @@
     {/each}
 </div>
 <div class="m-4">
-    <TextInput outFunction={newToDoItem}/>
+    <TextInput placeholderText="To-Do Text" outFunction={newToDoItem}/>
 </div>

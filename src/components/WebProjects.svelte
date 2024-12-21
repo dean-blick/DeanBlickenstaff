@@ -3,6 +3,7 @@
     import ToDoList from "./ToDoList.svelte";
     import FixedPopUp from "./FixedPopUp.svelte";
     import AbsolutePopUp from "./AbsolutePopUp.svelte";
+    import GitHubProfileDisplay from "./GitHubProfileDisplay.svelte";
 
 </script>
 
@@ -37,7 +38,17 @@
         </div>
     </WebProjectItem>
     <WebProjectItem>
-        
+        <div class="flex flex-col w-full max-h-full overflow-auto min-w-80 items-center mb-2">
+            <h class="py-4 font-semibold text-lg">GitHub Profile Fetcher</h>
+            <FixedPopUp buttonText="See ideas reinforced" overlayHeader="Concepts/Ideas">
+                <div class="flex flex-col">
+                    <p>&#8226; Reactive list of objects containing a boolean and string</p>
+                </div>
+            </FixedPopUp>
+        </div>
+        <div class="flex flex-col bg-black/30 backdrop-blur-sm w-full m-8 lg:w-1/2 items-center rounded-lg p-2 z-0">
+            <GitHubProfileDisplay/>
+        </div>
     </WebProjectItem>
     <WebProjectItem>
         
