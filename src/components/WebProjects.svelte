@@ -42,11 +42,13 @@
             <h class="py-4 font-semibold text-lg">GitHub Profile Fetcher</h>
             <FixedPopUp buttonText="See ideas reinforced" overlayHeader="Concepts/Ideas">
                 <div class="flex flex-col">
-                    <p>&#8226; Reactive list of objects containing a boolean and string</p>
+                    <p>&#8226; CSS note: A value other than none for the filter property results in the creation of a containing block for absolute and fixed positioned descendants</p>
+                    
                 </div>
             </FixedPopUp>
         </div>
-        <div class="flex flex-col bg-black/30 backdrop-blur-sm w-full m-8 lg:w-1/2 items-center rounded-lg p-2 z-0">
+        
+        <div class="flex flex-col w-full max-h-full bg-black/30  m-8 lg:w-1/2 items-center rounded-lg p-2 z-0">
             <GitHubProfileDisplay/>
         </div>
     </WebProjectItem>
