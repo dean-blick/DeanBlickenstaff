@@ -43,7 +43,9 @@
             <FixedPopUp buttonText="See ideas reinforced" overlayHeader="Concepts/Ideas">
                 <div class="flex flex-col">
                     <p>&#8226; CSS note: A value other than none for the filter property results in the creation of a containing block for absolute and fixed positioned descendants</p>
-                    
+                    <p>&#8226; Svelte note: Do not access object properties through in-line html script</p>
+                    <p>&#8226; Asynchronous functions</p>
+                    <p>&#8226; Fetch/await/promises/responses/results</p>
                 </div>
             </FixedPopUp>
         </div>

@@ -7,7 +7,7 @@
         "☑ Add mobile responsiveness",
         "☐ Add more web projects",
         "☐ Add headshot",
-        "☐ Host through firebase",
+        "☑ Host",
         "☐ Get good domain name?",
         "☐ Add experience summary"
     ]
