@@ -54,7 +54,7 @@
                 </p>
             </Step>
             <Step step={steps[2]}>
-                Custom Wordle is my version of Wordle where you can input a word of any length/validity and create a link that you can send to a friend. Due to this and a harder wordlist, entries are not checked against a dictionary. You can play it by clicking the link below.
+                Custom Wordle is a version of Wordle where you can input a word of any length/validity and create a link that you can send to a friend. Due to this and a harder wordlist, entries are not checked against a dictionary. You can play it by clicking the link below.
             </Step>
         </div>
         <a href="projects" class="mx-auto px-4 py-2 rounded-md border border-solid border-white flex items-center gap-2 -mb-0 sm:-mb-0 -mt-10
