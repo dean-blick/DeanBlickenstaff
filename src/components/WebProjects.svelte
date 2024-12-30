@@ -50,11 +50,16 @@
             </FixedPopUp>
         </div>
         
-        <div class="flex flex-col w-full max-h-full bg-black/30  m-8 lg:w-1/2 items-center rounded-lg p-2 z-0">
+        <div class="flex flex-col w-full max-h-full bg-black/30  m-8 lg:w-1/2 items-center rounded-lg p-2 relative">
             <GitHubProfileDisplay/>
         </div>
     </WebProjectItem>
     <WebProjectItem>
-        
+        <div class="flex flex-col w-full max-h-full overflow-auto min-w-80 items-center relative z-0">
+            <h class="py-4 font-semibold text-lg">Sorting Algorithm Visualiser</h>
+            <a href="sortingVisual" class="customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center">
+                <h4 class="relative">Go to this project</h4>
+            </a>
+        </div>
     </WebProjectItem>
 </div>
