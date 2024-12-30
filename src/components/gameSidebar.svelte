@@ -1,8 +1,13 @@
-<script>
+<script lang="ts">
     import { fly } from 'svelte/transition';
+    
+  interface Props {
     //export let show = false;
-    export let id = -1;
-    export let sidebarContent = -1;
+    id?: any;
+    sidebarContent?: any;
+  }
+
+  let { id = -1, sidebarContent = -1 }: Props = $props();
 </script>
 
 <style>

@@ -3,8 +3,8 @@
     import { onMount } from "svelte"
     
     let urlStr = "";
-    let word = "";
-    let loaded = false;
+    let word = $state("");
+    let loaded = $state(false);
 
     function decrypt(urlStr){
         var finalDecrypt = ""

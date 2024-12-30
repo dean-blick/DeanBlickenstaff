@@ -2,15 +2,15 @@
     import { onMount } from "svelte";
     import TextInput from "./TextInput.svelte";
     import FixedPopUp from "./FixedPopUp.svelte";
-    let dataGood;
+    let dataGood = $state();
     let login;
-    let avatar;
-    let repoCount;
-    let followers;
-    let following;
-    let reposLink;
-    let name;
-    let createdAtDate;
+    let avatar = $state();
+    let repoCount = $state();
+    let followers = $state();
+    let following = $state();
+    let reposLink = $state();
+    let name = $state();
+    let createdAtDate = $state();
 
 
     async function fetchData(profileName) {
@@ -48,9 +48,9 @@
 
 <div class="flex flex-col items-center">
     
-    {#await dataGood }
+    {#await dataGood}
         <div>Waiting for profile..</div>
-    {:then result }
+    {:then result}
         <div class="flex flex-col w-full items-center">
             <h1 class="text-lg font-semibold">{name}</h1>
             <div class="flex flex-row">
@@ -71,7 +71,7 @@
             
         </div>
         
-    {:catch error }
+    {:catch error}
         <div>{"Error getting profile: " + error.message}</div>
     {/await}
 

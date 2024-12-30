@@ -1,5 +1,5 @@
-<script>
-    export let y;
+<script lang="ts">
+    let { y } = $props();
 
     let tabs = [
         { name: 'Projects', link: 'projects'},

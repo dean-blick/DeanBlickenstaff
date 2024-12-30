@@ -1,9 +1,7 @@
-<script>
+<script lang="ts">
     import Tile from "./gameTile.svelte"
 
-    export let rowData = ['']
-    export let keyPosition = -1
-    export let lineStatus = [0]
+    let { rowData = [''], keyPosition = -1, lineStatus = [0] } = $props();
 </script>
 <div class="flex flex-row font-bold text-3xl">
     {#each rowData as tile,i}

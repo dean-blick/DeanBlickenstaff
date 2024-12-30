@@ -1,3 +1,5 @@
+<!-- @migration-task Error while migrating Svelte code: `i` has already been declared
+https://svelte.dev/e/declaration_duplicate -->
 
 <script>
     import Line from "./gameLine.svelte"
@@ -70,7 +72,7 @@
                         }
                     }
                     //Similar Check
-                    for(var i = 0; i < wordLength; i++){
+                    for(i = 0; i < wordLength; i++){
                         if(newLineStatus[i] != 0) continue;
                         if(answerArray.indexOf(input[i]) != -1){
                             newLineStatus[i] = 2

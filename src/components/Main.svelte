@@ -60,7 +60,7 @@
         <a href="projects" class="mx-auto px-4 py-2 rounded-md border border-solid border-white flex items-center gap-2 -mb-0 sm:-mb-0 -mt-10
         hover:border-blue-700 duration-200">
             <p>See all of my projects here</p>
-            <i class="fa-solid fa-link"/>
+            <i class="fa-solid fa-link"></i>
         </a>
     </section>
 </main>

@@ -11,7 +11,7 @@
                 dean-blick
                 <sup>
                     <span class="text-xs scale-75">
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs scale-[75%] z-0"/>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs scale-[75%] z-0"></i>
                     </span>
                 </sup>
             </a>
@@ -22,7 +22,7 @@
                 deanblickenstaff
                 <sup>
                     <span class="text-xs scale-75">
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs scale-[75%] z-0"/>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs scale-[75%] z-0"></i>
                     </span>
                 </sup>
             </a>

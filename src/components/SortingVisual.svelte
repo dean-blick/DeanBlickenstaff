@@ -1,10 +1,12 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { Canvas } from "svelte-canvas";
 
-    $: elementCount = 300;
-    $: msDelay = 2;
-    let canvas;
+    let elementCount = $derived(300);
+    let msDelay = $derived(2);
+    let canvas = $state();
     let ctx;
     let offset = 10;
 
@@ -15,7 +17,10 @@
 
     
 
-    $: listElements = [{ elementLength: 1, currentPos: 0, isBeingEvaluated: false, currentPosIsCorrect: true }]; 
+    let listElements;
+    run(() => {
+        listElements = [{ elementLength: 1, currentPos: 0, isBeingEvaluated: false, currentPosIsCorrect: true }];
+    }); 
 
     function CreateElements(elementCount) {
         listElements = [];
@@ -109,5 +114,5 @@
     <canvas class="w-full h-[calc(60vh)]" width="2000" height="1000" bind:this={canvas}>
 
     </canvas>
-    <button class="border-dark-100 border-1 rounded-lg px-2 py-1 text-white" on:click={() => bubbleSort()}>Submit</button>
+    <button class="border-dark-100 border-1 rounded-lg px-2 py-1 text-white" onclick={() => bubbleSort()}>Submit</button>
 </div>

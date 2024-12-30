@@ -7,7 +7,7 @@
     <ProjectItem>
         <div class="flex flex-col w-1/2 max-h-full overflow-auto min-w-80">
             <h class="py-4 font-semibold text-lg">Websocket Auction</h>
-            <p class="py-4">&emsp;This was a group project for CIS 501 at Kansas State University. A websocket was used to coordinate the bidding and sale of different items through a client and server interface.<p/> 
+            <p class="py-4">&emsp;This was a group project for CIS 501 at Kansas State University. A websocket was used to coordinate the bidding and sale of different items through a client and server interface.<p></p> 
             <p class="py-4">&emsp;I was responsible for the client side code & UML. See the UML (open in new tab) and demo video to the right. Still working on my presentation skills.</p>
         </div>
         <img class="w-1/4 m-10 min-w-80" alt="uml diagram" src={umlImg} />

@@ -1,5 +1,5 @@
 <script>
-    let checklist;
+    let checklist = $state();
     checklist = [
         "☑ Add CIS400 project",
         "☑ Add Scantron project",
