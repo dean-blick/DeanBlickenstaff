@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { Canvas } from "svelte-canvas";
 
     $: elementCount = 300;
     $: msDelay = 2;
@@ -37,7 +38,8 @@
                     
                     isSwapped = true;
                 }
-                setTimeout(drawCanvas(), 10);
+                
+                setTimeout(drawCanvas(), 1000);
             }
 
             // If no two elements were swapped in the inner loop, array is sorted

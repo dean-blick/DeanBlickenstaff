@@ -18,6 +18,6 @@ const config = {
 		}),
     alias: { 'lib/': './src/routes/lib/' },
   },
-  preprocess: vitePreprocess()
+  preprocess: vitePreprocess({typescript: true })
 };
 export default config;
