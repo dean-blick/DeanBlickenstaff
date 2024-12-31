@@ -1,14 +1,17 @@
-<script>
-    import { run } from 'svelte/legacy';
+<script lang="ts">
+    import { tick } from "svelte";
+    import { Canvas, Layer, type Render } from "svelte-canvas";
+    import { draw } from "svelte/transition";
 
-    import { onMount } from "svelte";
-    import { Canvas } from "svelte-canvas";
 
-    let elementCount = $derived(300);
-    let msDelay = $derived(2);
-    let canvas = $state();
+    let elementCount = $state(100);
+    let msDelay = $state(2);
+    let canvas;
     let ctx;
     let offset = 10;
+    let bubbleRunning = $state(false);
+
+    let drawing = $state(false);
 
     const sortType = {
         bubble: "bubble",
@@ -18,9 +21,6 @@
     
 
     let listElements;
-    run(() => {
-        listElements = [{ elementLength: 1, currentPos: 0, isBeingEvaluated: false, currentPosIsCorrect: true }];
-    }); 
 
     function CreateElements(elementCount) {
         listElements = [];
@@ -30,7 +30,26 @@
         Shuffle();
     }
 
-    async function bubbleSort() {
+    
+
+    async function RunBubble() {
+        const iterator = bubbleSort();
+        bubbleRunning = true;
+        let prevElement;
+        while(bubbleRunning) {
+            const next = iterator.next();
+            if(!next.done) {
+                
+                
+                //listElements[next.value].isBeingEvaluated = true;
+                //prevIndex = next.value?;
+                setTimeout(() => 0, 100)
+            }
+        }
+        
+    }
+
+    function* bubbleSort() {
         let isSwapped;
 
         for (let i = 0; i < elementCount; i++) {
@@ -40,19 +59,32 @@
                 if (listElements[j].elementLength > listElements[j + 1].elementLength) {
                     // Swap elements
                     SwapElements(j, j + 1);
-                    
+                    yield j;
                     isSwapped = true;
                 }
                 
-                setTimeout(drawCanvas(), 1000);
+                
             }
 
             // If no two elements were swapped in the inner loop, array is sorted
-            if (!isSwapped)
+            if (!isSwapped) {
+                bubbleRunning = false;
                 break;
+            }
+            
         }
-        
+        bubbleRunning = false;
     }
+
+    function drawCanvas() {
+        requestAnimationFrame(drawCanvas);
+        canvas?.redraw();
+    }
+
+    //ideas: animation loop??
+    //send manual function calls between animation and calculation (bad idea)
+    //separate thread?
+
 
     function SwapElements(i, j) {
         [listElements[i], listElements[j]] = [listElements[j], listElements[i]]; 
@@ -83,36 +115,43 @@
         CreateElements(elementCount);
     }
 
-    async function drawCanvas() {
-        offset = 0;
-        let viewHeight = canvas.height;
-        let viewWidth = canvas.width;
-        let rectWidth = (viewWidth-(offset*2))/elementCount;
-        let rectFractionHeight = viewHeight/elementCount;
-        ctx.lineWidth = 1;
-        ctx.clearRect(0, 0, viewWidth, viewHeight);
-        ctx.fillStyle = "#60a5fa";
-        for(let i = 0; i < elementCount; i++) {
-            if(listElements[i].currentPosIsCorrect) ctx.fillStyle = "#008000";
-            if(listElements[i].isBeingEvaluated) ctx.fillStyle = "#CBC3E3";
-            ctx.fillRect(offset, viewHeight, rectWidth, -(rectFractionHeight*listElements[i].elementLength));
-            offset += rectWidth;
-            ctx.fillStyle = "#60a5fa";
-        }
-    }
 
-    onMount(async () => {
-        ctx = canvas.getContext('2d');
+    const render: Render = ({ context, width, height }) => {
+        offset = 0;
+        let rectWidth = (width-(offset*2))/elementCount;
+        let rectFractionHeight = height/elementCount;
+        context.lineWidth = 1;
+        context.clearRect(0, 0, width, height);
+        context.fillStyle = "#60a5fa";
+        for(let i = 0; i < elementCount; i++) {
+            if(listElements[i].currentPosIsCorrect) context.fillStyle = "#008000";
+            if(listElements[i].isBeingEvaluated) context.fillStyle = "#CBC3E3";
+            context.fillRect(offset, height, rectWidth, -(rectFractionHeight*listElements[i].elementLength));
+            offset += rectWidth;
+            context.fillStyle = "#60a5fa";
+        }
+    };
+
+    
+
+    $effect(() => {
+        ctx = canvas?.context;
         CreateExample();
         drawCanvas();
     });
+
+
     
+    //One sort and draw occurs within the tick, then the next sort and draw wait for the current tick to end before starting
+    //function Tick() {
+
+    //}
 
 </script>
 
 <div class="h-full">
-    <canvas class="w-full h-[calc(60vh)]" width="2000" height="1000" bind:this={canvas}>
-
-    </canvas>
-    <button class="border-dark-100 border-1 rounded-lg px-2 py-1 text-white" onclick={() => bubbleSort()}>Submit</button>
+    <Canvas autoplay class="w-full h-[calc(60vh)]" width = {1400} height = {600} bind:this={canvas}>
+        <Layer {render}/>
+    </Canvas>
+    <button class="border-dark-100 border-1 rounded-lg px-2 py-1 text-white" onclick={() => RunBubble()}>Submit</button>
 </div>
