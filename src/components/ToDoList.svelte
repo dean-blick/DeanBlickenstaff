@@ -28,9 +28,9 @@
     <div class="flex flex-row justify-start h-8 items-center my-2">
         <input type="checkbox" class="mx-4" checked={item.checked}/>
         <p>{item.s}</p>
-        <button class="border-dark-100 border-1 rounded-lg py-1 mx-2 text-white ml-auto" onclick={moveToDoItem(listItems.indexOf(item), false)}><i class="fa-solid fa-arrow-down"></i></button>
-        <button class="border-dark-100 border-1 rounded-lg py-1 mx-2 text-white" onclick={moveToDoItem(listItems.indexOf(item), true)}><i class="fa-solid fa-arrow-up"></i></button>
-        <button class="border-dark-100 border-1 rounded-lg py-1 mx-4 text-white" onclick={removeToDoItem(listItems.indexOf(item))}><i class="fa-solid fa-trash-can"></i></button>
+        <button class="border-dark-100 border-1 rounded-lg py-1 mx-2 text-white ml-auto" aria-label="icon" onclick={moveToDoItem(listItems.indexOf(item), false)}><i class="fa-solid fa-arrow-down"></i></button>
+        <button class="border-dark-100 border-1 rounded-lg py-1 mx-2 text-white" aria-label="icon" onclick={moveToDoItem(listItems.indexOf(item), true)}><i class="fa-solid fa-arrow-up"></i></button>
+        <button class="border-dark-100 border-1 rounded-lg py-1 mx-4 text-white" aria-label="icon" onclick={removeToDoItem(listItems.indexOf(item))}><i class="fa-solid fa-trash-can"></i></button>
     </div>
     {/each}
 </div>
