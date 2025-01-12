@@ -11,6 +11,7 @@
 	let bubbleRunning = $state(false)
 	let quickRunning = $state(false)
 	let mergeRunning = $state(false)
+	let selectionRunning = $state(false)
 
 	let drawing = $state(false)
 
@@ -20,6 +21,7 @@
 		bubble: "Bubble",
 		quick: "Quick",
 		merge: "Merge",
+		selection: "Selection"
 	}
 
 	let currentMethod = sortType.bubble
@@ -43,9 +45,11 @@
 		const iterator = bubbleSort()
 		bubbleRunning = true
 		let prevElement
+		SetCorrectElements()
 		while (bubbleRunning) {
 			let next = iterator.next()
 			if (!next.done) {
+				SetCorrectElements()
 				await sleep(msDelay)
 				let prev
 				if (typeof next.value == "number") prev = next.value
@@ -70,14 +74,12 @@
 					listElements[j].elementLength >
 					listElements[j + 1].elementLength
 				) {
-					// Swap elements
 					SwapElements(j, j + 1)
 					isSwapped = true
 				}
 				yield j
 			}
 			yield i
-			// If no two elements were swapped in the inner loop, array is sorted
 			if (!isSwapped) {
 				bubbleRunning = false
 				isSorting = false
@@ -88,9 +90,128 @@
 		isSorting = false
 	}
 
-	async function RunMerge() {}
+	async function RunSelection() {
+		const iterator = SelectionSort()
+		selectionRunning = true
+		let prevElement
+		SetCorrectElements()
+		while (selectionRunning) {
+			let next = iterator.next()
+			if (!next.done) {
+				SetCorrectElements()
+				await sleep(msDelay)
+				let prev
+				if (typeof next.value == "number") prev = next.value
+				try {
+					listElements[prev].isBeingEvaluated = false
+					listElements[prev + 1].isBeingEvaluated = false
+				} catch {}
+				if (isSorting == false) return
+			}
+		}
+	}
 
-	function* MergeSort() {}
+	function* SelectionSort() {
+		const n = listElements.length;
+
+		for (let i = 0; i < n; i++) {
+		let min = i;
+		for (let j = i + 1; j < n; j++) {
+			if (listElements[j].elementLength < listElements[min].elementLength) {
+				min = j
+			}
+			listElements[j].isBeingEvaluated = true;
+			yield j
+		}
+		if (min != i) {
+			SwapElements(i, min)
+		}
+		listElements[i].isBeingEvaluated = true;
+		yield i
+		}
+	}
+
+	async function RunMerge() {
+        const iterator = mergeSortStart(0, listElements.length - 1)
+		mergeRunning = true
+		let prev
+		while (mergeRunning) {
+			let next = iterator.next()
+			if (!next.done) {
+				SetCorrectElements()
+				await sleep(msDelay)
+				let prev
+				if (typeof next.value == "number") prev = next.value
+				try {
+					listElements[prev].isBeingEvaluated = false
+					listElements[prev + 1].isBeingEvaluated = false
+				} catch {}
+				if (isSorting == false) return
+			} else {
+                mergeRunning = false
+                isSorting = false
+            }
+		}
+    }
+
+	function* MergeSort (l, m, r) {
+        const n1 = m - l + 1;
+        const n2 = r - m;
+
+        const left = new Array(n1);
+        const right = new Array(n2);
+
+        for (let i = 0; i < n1; i++) {
+            left[i] = listElements[l + i];
+        }
+        for (let j = 0; j < n2; j++) {
+            right[j] = listElements[m + 1 + j];
+        }
+
+        let i = 0;
+
+        let j = 0;
+
+        let k = l;
+
+        while (i < n1 && j < n2) {
+			listElements[k].isBeingEvaluated = true;
+            yield k
+            if (left[i].elementLength <= right[j].elementLength) {
+            listElements[k] = left[i];
+            i++;
+            } else {
+            listElements[k] = right[j];
+            j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            listElements[k] = left[i];
+			listElements[k].isBeingEvaluated = true;
+            yield k;
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            listElements[k] = right[j];
+			listElements[k].isBeingEvaluated = true;
+            yield k;
+            j++;
+            k++;
+        }
+    };
+
+    function* mergeSortStart (l,r){
+    if (l < r) {
+        const m = l + Math.floor((r - l) / 2);
+        yield* mergeSortStart(l, m);
+        yield* mergeSortStart(m + 1, r);
+        yield* MergeSort(l, m, r);
+    }
+    };
 
 	async function RunQuick() {
         const iterator = QuickSort(0, listElements.length - 1)
@@ -99,6 +220,7 @@
 		while (quickRunning) {
 			let next = iterator.next()
 			if (!next.done) {
+				SetCorrectElements()
 				await sleep(msDelay)
 				let prev
 				if (typeof next.value == "number") prev = next.value
@@ -152,7 +274,6 @@
         }
     }
 
-
 	function switchSortingMethod(method) {
 		currentMethod = method
 	}
@@ -167,6 +288,9 @@
 				break
 			case sortType.quick:
 				RunQuick()
+				break
+			case sortType.selection:
+				RunSelection()
 				break
 		}
 	}
@@ -185,20 +309,21 @@
 	}
 
 	function SwapElements(i, j) {
-		;[listElements[i], listElements[j]] = [listElements[j], listElements[i]]
+		[listElements[i], listElements[j]] = [listElements[j], listElements[i]]
 		let tempPos = listElements[i].currentPos
 		listElements[i].currentPos = listElements[j].currentPos
 		listElements[j].currentPos = tempPos
-		if (listElements[i].elementLength == listElements[i].currentPos) {
-			listElements[i].currentPosIsCorrect = true
-		} else {
-			listElements[i].currentPosIsCorrect = false
-		}
-		if (listElements[j].elementLength == listElements[j].currentPos) {
-			listElements[j].currentPosIsCorrect = true
-		} else {
-			listElements[j].currentPosIsCorrect = false
-		}
+	}
+
+	function SetCorrectElements() {
+		listElements.forEach(element => {
+			element.currentPos = listElements.indexOf(element)
+			if (element.elementLength == element.currentPos) {
+				element.currentPosIsCorrect = true
+			} else {
+				element.currentPosIsCorrect = false
+			}
+		});
 	}
 
 	function Shuffle() {
@@ -207,6 +332,7 @@
 			let newPos = Math.floor(Math.random() * (i + 1))
 			SwapElements(i, newPos)
 		}
+		SetCorrectElements()
 	}
 
 	function CreateExample() {
@@ -256,7 +382,7 @@
 	</Canvas>
 	<div class="py-4"></div>
 	<Selector
-		options={["Bubble", "Quick", "Merge"]}
+		options={["Bubble", "Quick", "Merge", "Selection"]}
 		switchCondition={!isSorting}
 		exportFunction={switchSortingMethod}
 	/>
