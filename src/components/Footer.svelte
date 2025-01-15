@@ -5,9 +5,9 @@
 
     <div class="flex flex-col gap-4 items-center justify-center">
         <p><b class="pr-3">Email</b>cdblickenstaff@gmail.com</p>
-        <p>
+        <p class="z-[50]">
             <b class="pr-2">GitHub</b>
-            <a href ="https://github.com/dean-blick" target ="_blank" class="text-blue-500">
+            <a href ="https://github.com/dean-blick" target ="_blank" class="text-blue-500 z-[50]">
                 dean-blick
                 <sup>
                     <span class="text-xs scale-75">
@@ -16,7 +16,7 @@
                 </sup>
             </a>
         </p>
-        <p>
+        <p class="z-[50]">
             <b class="pr-2">LinkedIn</b>
             <a href ="https://www.linkedin.com/in/deanblickenstaff/" target ="_blank" class="text-blue-500">
                 deanblickenstaff

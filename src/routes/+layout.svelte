@@ -21,7 +21,7 @@
 
 <div class="relative flex flex-col max-w-[1400px] mx-auto w-full text-sm sm:text-base min-h-screen">
     <!-- ? denotes if statement where left of colon is true and right of colon is false, left of ? is conditional statement-->
-    <div class="fixed bottom-0 w-full max-w-[1600px] duration-200 flex p-10 z-[10] {y > 0 ?  "opacity-full pointer-events-auto" : "pointer-events-none opacity-0"}">
+    <div class="fixed bottom-0 w-full max-w-[1600px] duration-200 flex p-10 z-[0] {y > 0 ?  "opacity-full pointer-events-auto" : "pointer-events-none opacity-0"}">
         <button onclick={scrollToTop} aria-label="scroll button" class="ml-auto rounded-full bg-slate-900 text-blue-500 px-3 sm:px-4  hover:bg-slate-800 cursor-pointer">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
