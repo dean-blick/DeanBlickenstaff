@@ -55,11 +55,23 @@
         </div>
     </WebProjectItem>
     <WebProjectItem>
-        <div class="flex flex-col w-full max-h-full overflow-auto min-w-80 items-center relative z-0">
+        <div class="flex flex-col w-full max-h-full overflow-auto min-w-80 items-center relative z-0 ">
             <h class="py-4 font-semibold text-lg">Sorting Algorithm Visualiser</h>
-            <a href="sortingVisual" class="customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center">
-                <h4 class="relative">Go to this project</h4>
-            </a>
+            <FixedPopUp buttonText="See ideas reinforced" overlayHeader="Concepts/Ideas">
+                <div class="flex flex-col">
+                    <p>&#8226; Generator/Iterator functions</p>
+                    <p>&#8226; Reactivity</p>
+                    <p>&#8226; Error prevention</p>
+                    <p>&#8226; Responsiveness</p>
+                    <p>&#8226; Reusable components</p>
+                    <p>&#8226; Promises</p>
+                </div>
+            </FixedPopUp>
+            <div class="flex flex-row justify-center items-center bg-black/30 backdrop-blur-sm w-full lg:w-1/2">
+                <a href="sortingVisual" class="customShadow relative overflow-hidden px-5 py-2 my-4 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center">
+                    <h4 class="relative">Go to this project</h4>
+                </a>
+            </div>
         </div>
     </WebProjectItem>
 </div>
