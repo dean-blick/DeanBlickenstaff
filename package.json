@@ -27,6 +27,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"mongodb": "^6.13.0",
 		"svelte-canvas": "^2.0.2",
 		"tone": "^15.0.4",
 		"wrangler": "^3.97.0"
