@@ -1,5 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: `i` has already been declared
-https://svelte.dev/e/declaration_duplicate -->
 
 <script>
     import Line from "./gameLine.svelte"

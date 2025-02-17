@@ -11,4 +11,3 @@ export const load: PageServerLoad = async function() : Promise<{ testData }> {
         testData: data
     }
 }
-
