@@ -2,10 +2,14 @@
 	import { goto } from "$app/navigation"
 	import TextInput from "../../components/TextInput.svelte"
     import type {PageData} from "./$types";
+    import type { Actions } from '@sveltejs/kit'
+    import { enhance } from "$app/forms";
 
-    const { data } = $props<{ data: PageData }>()
+    let data: PageData = $props()
 
     let testData = $derived(data)
+
+    console.log(data)
 
     let createLobbyName = $state("Lobby Name")
 
@@ -43,7 +47,7 @@
         <input class="my-4 bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" placeholder={"Username"} bind:value={userName}>
     </div>
     <div class="flex flex-row">
-        <form method="POST" action="/lobby">
+        <form method="POST" action="?/addLobbyDocument" use:enhance>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" name = "lobbyName" placeholder={"lobbyName"} bind:value={createLobbyName}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" name = "maxPlayers" placeholder={"Max Players"} bind:value={maxPlayers}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="checkbox" name = "isPublic" placeholder={"Public?"} bind:checked={isPublic}>
@@ -52,7 +56,6 @@
                 Create Lobby
             </button>
         </form>
-        
     </div>
     {#each testData as d}
         <div class="flex flex-row mt-2">
