@@ -15,16 +15,10 @@
 
     let maxPlayers = $state(2)
 
+    let isPublic = $state(true)
+
     async function CreateLobby(lobbyName, isPublic, userName, maxPlayers) {
-        const response = await fetch (`http://[::1]:5173/lobby/createLobby/id`)
-        let createResult = await response.json() // of type ObjectId String
-        if (createResult !== 0) {
-            const response = await fetch(`http://[::1]:5173/lobby/id/${createResult}`)
-            let joinResult = await response.json()
-            if (joinResult == true) {
-                goto(`/lobby/game/${createResult}`)
-            }
-        }
+        //let createResult = await response.json() // of type ObjectId String
     }
 
     async function JoinLobby(id) {
@@ -49,12 +43,16 @@
         <input class="my-4 bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" placeholder={"Username"} bind:value={userName}>
     </div>
     <div class="flex flex-row">
-        <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" placeholder={"lobbyName"} bind:value={createLobbyName}>
-        <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" placeholder={"Max Players"} bind:value={maxPlayers}>
-        <button class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
-            onclick={() => CreateLobby(createLobbyName, true, userName, maxPlayers)}>
-            Create Lobby
-        </button>
+        <form method="POST" action="/lobby">
+            <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" name = "lobbyName" placeholder={"lobbyName"} bind:value={createLobbyName}>
+            <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" name = "maxPlayers" placeholder={"Max Players"} bind:value={maxPlayers}>
+            <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="checkbox" name = "isPublic" placeholder={"Public?"} bind:checked={isPublic}>
+            <button class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
+                onclick={() => {}}>
+                Create Lobby
+            </button>
+        </form>
+        
     </div>
     {#each testData as d}
         <div class="flex flex-row mt-2">
