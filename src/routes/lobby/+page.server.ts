@@ -3,7 +3,6 @@ import type { PageServerLoad } from "./$types";
 import type { Actions } from '@sveltejs/kit'
 import { json } from "@sveltejs/kit";
 import { ObjectId } from 'mongodb';
-import type { RequestHandler } from './id/createLobby/$types'
 
 
 export const load: PageServerLoad = async function() : Promise<{ testData }> {
@@ -27,8 +26,8 @@ function createLobbyRecord(lobbyName, maxPlayers, isPublic) {
             {
                 "public": isPublic,
                  "name": lobbyName,
-                 "playercount": 1,
-                 "maxPlayers": maxPlayers,
+                 "playerCount": 1,
+                 "maxPlayers": Number(maxPlayers),
                  "players": ["testPlayer1", "testPlayer2"]
             }
         )
@@ -45,22 +44,33 @@ export const actions: Actions = {
         const maxPlayers = String(formData.get('maxPlayers'))
         const isPublic = String(formData.get('isPublic'))
         console.log(lobbyName)
-        console.log("uh oh")
-    
-        const data: Data = {
-            success: false,
-            errors: {}
-        }
     
         if(!lobbyName || !maxPlayers) {
-            data.errors.lobbyName = 'required'
-            data.errors.maxPlayers = 'required'
-            return json(data, { status: 400 })
+            return { "success": false }
         }
     
         createLobbyRecord(lobbyName, maxPlayers, isPublic)
-        data.success = true
         
         return { "success": true }
+    },
+    playerJoinRequest: async ({request}) => {
+        const formData = await request.formData()
+        const id = String(formData.get("lobbyId"))
+        const lobby = (await testData.find({"_id": ObjectId.createFromHexString(id) }).toArray()).map(testData => ({
+            ...testData
+        }))
+        const playerUsername = String(formData.get('playerUsername'))
+        if (lobby[0].playerCount >= lobby[0].maxPlayers) {
+            console.log("false")
+            return { "success": false }
+        }
+        let playerList = lobby[0].players
+        playerList.push(playerUsername)
+        testData.updateOne(
+            {"_id": ObjectId.createFromHexString(id)},
+            { $set: { "playerCount": lobby[0].playerCount + 1, "players": playerList}}
+        )
+        return {"success": true}
+        //either delete and reinsert the lobby document or find a method to update the existing document
     }
 }

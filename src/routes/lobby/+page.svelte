@@ -11,11 +11,11 @@
 
     let createLobbyName = $state("Lobby Name")
 
-    let userName = $state("")
+    let userName = $state("Player")
 
     let isUsernameFilled = $derived(userName ? true : false)
 
-    let maxPlayers = $state(2)
+    let maxPlayers: number = $state(2)
 
     let isPublic = $state(true)
 
@@ -65,10 +65,15 @@
                     {/each}
                 </h3>
             </article>
-            <button class="ml-8 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
-                onclick={() => JoinLobby(d._id)}>
+            <form method="POST" action="?/playerJoinRequest" use:enhance>
+                <input type="hidden" name="lobbyId" value={d._id}/>
+                <input type="hidden" name="playerUsername" value={userName}/>
+                <button disabled={userName == ""} class="ml-8 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
+                onclick={() => {}}>
                 Join Lobby
             </button>
+            </form>
+            
         </div>
     {/each}
     
