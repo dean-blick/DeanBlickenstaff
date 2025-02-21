@@ -5,11 +5,9 @@
     import type { Actions } from '@sveltejs/kit'
     import { enhance } from "$app/forms";
 
-    let data: PageData = $props()
+    const { data } = $props()
 
-    let testData = $derived(data)
-
-    console.log(data)
+    let testData = $derived(data.testData)
 
     let createLobbyName = $state("Lobby Name")
 
