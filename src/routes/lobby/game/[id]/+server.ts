@@ -1,44 +1,50 @@
 import { testData } from "$lib/server/testData";
-const stream = new ReadableStream()
-
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-//map lobby id to a readable stream and a controller for that readable stream
-
 let map = new Map();
 
-map.set('lobbyId', {
-    'readableStream': 'maballs',
-    'streamController': 'maballs'
-})
+// map.set('lobbyId', {
+//     'mapStream': 'maballs',
+//     'mapController': 'maballs'
+// })
 
-let globalController;
 
-sleep(10000).then(() => {
-    globalController.enqueue('my balls, 10 seconds later')
-})
+// sleep(10000).then(() => {
+    
+// })
 
 
 
 export function GET({request, params}): Response {
+    let stream;
+    if(map.has(params.id)) {
+        let mapObj = map.get(params.id)
+        stream = mapObj.mapStream
+    } else {
+        let controllerRef;
+        //create new map with new controller and stream
+        const ac = new AbortController();
+        stream = new ReadableStream({
+        start(controller) {
+            controllerRef = controller;
+        },
+        cancel() {
+            console.log("cancel and abort");
+            ac.abort();
+        },
+        })
+        map.set(params.id, {
+            'mapStream': stream,
+            'mapController': controllerRef
+        })
+    }
     //If the given lobby id exists in the map return the proper stream and controller, if not create new
     //params.id is the lobby id
 
-    const ac = new AbortController();
-    const stream = new ReadableStream({
-    start(controller) {
-        globalController = controller;
-        controller.enqueue("ball ball balls");
-    },
-    cancel() {
-        console.log("cancel and abort");
-        ac.abort();
-    },
-    })
-
+    
     return new Response(stream, {
     headers: {
         'content-type': 'text/event-stream',

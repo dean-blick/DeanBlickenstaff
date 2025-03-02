@@ -7,27 +7,43 @@
 
     let stream: Duplex
 
+    let inLobby = true;
+    let isHost = $state(false)
+    let lobbyID;
+    let lobbyInfo = data.testData[0];
+    console.log(lobbyInfo);
+    let playerID;
+    let hostID;
+
+
+
     // $effect(() => {
     //     if(navigating) {
     //         sendPlayerLeave()
     //     }
     // })
 
+    //recieve updated lobby state
+
     let result = "";
 
     async function getStream() {
-    const response = await fetch(location.href);
-    const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
-    while (true) {
-        const { value, done } = await reader.read();
-        console.log("resp", done, value);
-        if (done) break;
-        result += `${value}<br>`;
-    }
+        const response = await fetch(location.href);
+        const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+        while (true) {
+            const { value, done } = await reader.read();
+            console.log("resp", done, value);
+            if (done) break;
+            result += `${value}<br>`;
+        }
     }
 
     onMount(async () => {
         getStream();
+
+        playerID = data.playerID
+        hostID = lobbyInfo.host
+        if (String(playerID) == String(hostID)) isHost = true;
     })
     
     
@@ -42,5 +58,18 @@
 
 
 <div>
-    You are in the lobby
+    {#if inLobby}
+        <div class="flex flex-col">
+            {#each lobbyInfo.players as player}
+                <div>
+                    {player.playerName}
+                </div>
+            {/each}
+        </div>
+        {#if isHost}
+            <div>
+                Start Game
+            </div>
+        {/if}
+    {/if}
 </div>

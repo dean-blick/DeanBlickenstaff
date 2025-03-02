@@ -18,10 +18,8 @@
         
         fetch(`https://api.github.com/users/${profileName}`)
 		.then(response => { 
-		   console.log(' response', response)
 		   response.json()
 			   .then(json => {
-					console.log('json', json)
 				    dataGood = json;
                     login = json.login;
                     avatar = json.avatar_url;

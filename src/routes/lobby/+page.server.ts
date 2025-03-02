@@ -1,4 +1,5 @@
 import { testData } from "$lib/server/testData";
+import test from "node:test";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
@@ -25,7 +26,7 @@ type Data = {
 
 //get zod library for form validation
 
-function createLobbyRecord(lobbyName, maxPlayers, isPublic) {
+function createLobbyRecord(lobbyName, maxPlayers, isPublic, host) {
     try {
         testData.insertOne(
             {
@@ -33,7 +34,8 @@ function createLobbyRecord(lobbyName, maxPlayers, isPublic) {
                  "name": lobbyName,
                  "playerCount": 0,
                  "maxPlayers": Number(maxPlayers),
-                 "players": []
+                 "players": [],
+                 "host": host
             }
         )
     } catch {
@@ -43,18 +45,19 @@ function createLobbyRecord(lobbyName, maxPlayers, isPublic) {
 }
 
 export const actions: Actions = {
-    addLobbyDocument: async ({request}) => {
+    addLobbyDocument: async ({request, cookies}) => {
         const formData = await request.formData()
         const lobbyName = String(formData.get('lobbyName'))
         const maxPlayers = String(formData.get('maxPlayers'))
         const isPublic = String(formData.get('isPublic'))
+        const playerID = String(cookies.get('playerID'))
         console.log(lobbyName)
     
         if(!lobbyName || !maxPlayers) {
             return { "success": false }
         }
     
-        createLobbyRecord(lobbyName, maxPlayers, isPublic)
+        createLobbyRecord(lobbyName, maxPlayers, isPublic, playerID)
         
         return { "success": true }
     },

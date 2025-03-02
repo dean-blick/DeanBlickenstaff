@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from "$app/navigation"
-	import TextInput from "../../components/TextInput.svelte"
     import type {PageData} from "./$types";
     import { enhance } from "$app/forms";
     import type { ActionData } from "./$types";
@@ -27,16 +26,14 @@
 	}
 
     async function JoinLobby(id) {
-
-        let joinResult = form?.success;
-        if (joinResult == undefined) {
-            await sleep(1000)
-        }
-        if (joinResult == true) {
-            goto(`/lobby/game/${id}`)
-        } else {
-            console.log("Join Error")
-        }
+        sleep(500).then(() => {
+            console.log(form.success)
+            if (form.success == true) {
+                goto(`/lobby/game/${id}`)
+            } else {
+                console.log("Join Error")
+            }
+        })
     }
 </script>
 
