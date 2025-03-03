@@ -1,5 +1,4 @@
 import { testData } from "$lib/server/testData";
-import test from "node:test";
 import type { PageServerLoad } from "./$types";
 import type { Actions } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
@@ -35,7 +34,8 @@ function createLobbyRecord(lobbyName, maxPlayers, isPublic, host) {
                  "playerCount": 0,
                  "maxPlayers": Number(maxPlayers),
                  "players": [],
-                 "host": host
+                 "host": host,
+                 "gameIsRunning": false
             }
         )
     } catch {

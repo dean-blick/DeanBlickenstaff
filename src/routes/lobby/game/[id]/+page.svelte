@@ -7,8 +7,8 @@
 
     let stream: Duplex
 
-    let inLobby = true;
-    let isHost = $state(false)
+    let isGameRunning = $state(false);
+    let isHost = $state(false);
     let lobbyID;
     let lobbyInfo = data.testData[0];
     console.log(lobbyInfo);
@@ -38,11 +38,14 @@
         }
     }
 
+    //get new players in an updated lobbyInfo object from the stream
+
     onMount(async () => {
         getStream();
 
         playerID = data.playerID
         hostID = lobbyInfo.host
+        isGameRunning = lobbyInfo.isGameRunning
         if (String(playerID) == String(hostID)) isHost = true;
     })
     
@@ -58,7 +61,7 @@
 
 
 <div>
-    {#if inLobby}
+    {#if !isGameRunning}
         <div class="flex flex-col">
             {#each lobbyInfo.players as player}
                 <div>
@@ -71,5 +74,8 @@
                 Start Game
             </div>
         {/if}
+    {:else}
+        Display Live Game info
     {/if}
+    
 </div>
