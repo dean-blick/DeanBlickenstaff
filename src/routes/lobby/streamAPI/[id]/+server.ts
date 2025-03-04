@@ -22,6 +22,13 @@ interface LobbyStateObject {
     players: Map<string, PlayerData>;
     IsGameRunning: Boolean;
     GameState: Object;
+    host: string;
+    gameState: Object;
+}
+
+interface TicTacToeGameState {
+    currentTurn: string;
+    board: Array<string>;
 }
 
 function CreateReadableStream(): StreamObject {
@@ -81,7 +88,7 @@ export async function GET({params, cookies}): Promise<Response> {
         _id: testData._id.toString()
     }))
 
-    //console.log(arr)
+    //send the updated lobby
     masterMap.get(lobbyID).forEach(element => {
         element.streamObject.mapController.enqueue(JSON.stringify(data[0]))
     });
