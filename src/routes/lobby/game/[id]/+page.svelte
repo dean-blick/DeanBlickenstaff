@@ -2,14 +2,10 @@
     import { navigating } from "$app/state";
     import { onMount } from "svelte";
     import type { PageData } from "./$types";
-    import type { Duplex } from "stream";
     let { data }: { data: PageData} = $props();
-
-    let stream: Duplex
 
     let isGameRunning = $state(false);
     let isHost = $state(false);
-    let lobbyID;
     let lobbyInfo = data.testData[0];
     //console.log(lobbyInfo);
     let playerID;
@@ -47,7 +43,6 @@
 
     onMount(async () => {
         getStream();
-
         playerID = data.playerID
         hostID = lobbyInfo.host
         isGameRunning = lobbyInfo.isGameRunning
