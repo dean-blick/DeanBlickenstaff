@@ -5,7 +5,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let streamsMap = new Map();
+let map = new Map();
 let statesDict = {}
 
 
@@ -48,73 +48,93 @@ async function grabLobby(lobbyID): Promise<Object> {
 }
 
 
-// export async function GET({params, cookies}): Promise<Response> {
-    
-//     console.log("getting lobby")
-//     let playerID = cookies.get('playerID');
-//     let lobbyID = params.id;
-
-//     //grab the existing record for the lobby
-//     let data = await grabLobby(params.id)
-//     console.log(data[0])
-    
-//     //If there is a state record for the lobby, update it, if not create one
-//     if(!statesMap.has(lobbyID)) {
-//         console.log("initializing lobby state")
-//         let state: LobbyStateObject = {
-//             players: data[0].players,
-//             IsGameRunning: false,
-//             GameState: {}
-//         }
-//         statesMap.set(lobbyID, state)
-//     } else {
-//         console.log("adding new player to lobby state")
-//         let state: LobbyStateObject = statesMap.get(lobbyID);
-//         state.players = data[0].players;
-//         statesMap.set(lobbyID, state)
-//     }
-    
-//     let stream = await CreateReadableStream(statesMap.get(lobbyID))
-//     console.log(stream)
-//     console.log("sending GET response")
-    
-//     return new Response(stream, {
-//         headers: {
-//             'content-type': 'text/event-stream',
-//         }
-//     });
-// }
-
-export function GET({ params, cookies }) {
-    let lobbyID = params.id
-    const ac = new AbortController();
-    let interval;
-    const stream = new ReadableStream({
-      start(controller) {
-        interval = setInterval(() => {
-            if(!statesDict[params.id] != undefined){
-                let state: LobbyStateObject = {
-                    players: [],
-                    IsGameRunning: false,
-                    GameState: {}
-                }
-                statesDict[params.id] = state
+//make this function not horrible
+export async function GET({params, cookies}): Promise<Response> {
+    let stream: ReadableStream;
+    let playerID = cookies.get('playerID');
+    if(map.has(params.id)) {
+        //loop through the objects in the map array, check if a stream under the playerID already exists, if it does, overwrite it, if not add a new one
+        let arr: Array<StreamObject> = map.get(params.id)
+        let existsInMap = false;
+        for(let i = 0; i< arr.length; i++) {
+            if(arr[i].playerID == playerID){
+                const ac = new AbortController();
+                stream = new ReadableStream({
+                    start(controller) {
+                        arr[i].mapController = controller;
+                    },
+                    cancel() {
+                        //remove the playerIDs stream from the map using their lobby and playerID ----> TODO
+                        console.log("cancel and abort");
+                        ac.abort();
+                    },
+                })
+                arr[i].mapStream = stream;
+                existsInMap = true;
+                map.set(params.id, arr)
+                break;
             }
-            controller.enqueue(JSON.stringify(statesDict[params.id]))
-            
-        }, 250);
-      },
-      cancel() {
-        console.log("cancel and abort");
-        ac.abort();
-      },
-    })
+        }
+        if(!existsInMap) {
+            const ac = new AbortController();
+            let newMapController;
+            stream = new ReadableStream({
+                start(controller) {
+                    newMapController = controller;
+                },
+                cancel() {
+                    //remove the playerIDs stream from the map using their lobby and playerID ----> TODO
+                    console.log("cancel and abort");
+                    ac.abort();
+                },
+            })
+            let newStreamObj: StreamObject = {
+                'playerID': playerID,
+                'mapStream': stream,
+                'mapController': newMapController
+            }
+            arr.push(newStreamObj)
+            map.set(params.id, arr)
+        }
+        //send an updated lobby record to every stream under the given lobbyID
+        //grab the record
+        const data = (await testData.find({"_id": ObjectId.createFromHexString(params.id)}).toArray()).map(testData => ({
+            ...testData,
+            _id: testData._id.toString()
+        }))
 
-    //make call to update the statesMap from here. --------->>> TO DO
-  
+        //write the record to each stream
+        arr = map.get(params.id)
+        for(let i = 0; i< arr.length; i++) {
+            arr[i].mapController.enqueue(JSON.stringify(data[0]))
+        }
+    } else {
+        let controllerRef;
+        //create new map with new controller and stream
+        const ac = new AbortController();
+        stream = new ReadableStream({
+        start(controller) {
+            controllerRef = controller;
+        },
+        cancel() {
+            //remove the playerIDs stream from the map using their lobby and playerID ----> TODO
+            console.log("cancel and abort");
+            ac.abort();
+        },
+        })
+        let newStreamObj: StreamObject = {
+            'playerID': playerID,
+            'mapStream': stream,
+            'mapController': controllerRef
+        }
+        map.set(params.id, [newStreamObj])
+    }
+    //If the given lobby id exists in the map return the proper stream and controller, if not create new
+    //params.id is the lobby id
+
     return new Response(stream, {
-      headers: {
+    headers: {
         'content-type': 'text/event-stream',
-      }
+    }
     });
-  }
+}
