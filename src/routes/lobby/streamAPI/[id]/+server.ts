@@ -21,24 +21,23 @@ interface LobbyStateObject {
     GameState: Object;
 }
 
-async function CreateReadableStream(Subscription): Promise<ReadableStream> {
-    const ac = new AbortController();
-    let interval;
-    let stream = new ReadableStream({
-        start: async (controller) => {
-            interval = setInterval(() => {
-                controller.enqueue(Subscription)
-                 //currently, the stream cancels EVERY TIME i try to enqueue something.
-            }, 250);
-        },
-        cancel() {
-            //remove the playerIDs stream from the map using their lobby and playerID ----> TODO
-            console.log("cancel and abort");
-            ac.abort();
-        },
-    })
-    return stream
-}
+// function CreateReadableStream(Subscription): {stream: ReadableStream, controller: ReadableStreamDefaultController} {
+//     const ac = new AbortController();
+//     let stream = new ReadableStream({
+//         start: async (controller) => {
+//             interval = setInterval(() => {
+//                 controller.enqueue(Subscription)
+//                  //currently, the stream cancels EVERY TIME i try to enqueue something.
+//             }, 250);
+//         },
+//         cancel() {
+//             //remove the playerIDs stream from the map using their lobby and playerID ----> TODO
+//             console.log("cancel and abort");
+//             ac.abort();
+//         },
+//     })
+//     return stream
+// }
 
 async function grabLobby(lobbyID): Promise<Object> {
     const data = (await testData.find({"_id": ObjectId.createFromHexString(lobbyID)}).toArray()).map(testData => ({
