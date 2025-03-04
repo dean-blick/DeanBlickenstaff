@@ -51,7 +51,7 @@ export const actions: Actions = {
         const maxPlayers = String(formData.get('maxPlayers'))
         const isPublic = String(formData.get('isPublic'))
         const playerID = String(cookies.get('playerID'))
-        console.log(lobbyName)
+        //console.log(lobbyName)
     
         if(!lobbyName || !maxPlayers) {
             return { "success": false }
@@ -65,7 +65,7 @@ export const actions: Actions = {
         const formData = await request.formData()
         const id = String(formData.get("lobbyId"))
         const playerID = String(formData.get('playerID'))
-        console.log(playerID)
+        //console.log(playerID)
         const lobby = (await testData.find({"_id": ObjectId.createFromHexString(id) }).toArray()).map(testData => ({
             ...testData
         }))

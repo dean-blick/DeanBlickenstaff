@@ -27,7 +27,7 @@
 
     async function JoinLobby(id) {
         sleep(500).then(() => {
-            console.log(form.success)
+            //console.log(form.success)
             if (form.success == true) {
                 goto(`/lobby/game/${id}`)
             } else {
