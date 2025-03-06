@@ -4,11 +4,12 @@
     import type { PageData } from "./$types";
 	import Selector from "../../../../components/Selector.svelte"
 	import { enhance } from "$app/forms"
+	import TicTacToe from "../../clientLogic/TicTacToe.svelte"
     let { data }: { data: PageData} = $props();
 
     let isGameRunning = $state(false);
     let isHost = $state(false);
-    let playerID;
+    let playerID = $state('');
     let hostID;
     let game = "InLobby";
     let error = $state(false);
@@ -16,10 +17,14 @@
     interface LobbyStateObject {
         playerCount: Number;
         maxPlayers: Number;
-        players: Array<String>;
-        host: String;
-        game: String;
-        gameState: Object;
+        players: Array<string>;
+        host: string;
+        gameState: GameState;
+    }
+
+    interface GameState {
+        game: string;
+        state: Object;
     }
     
 
@@ -28,26 +33,21 @@
         maxPlayers: 99,
         players: [],
         host: "",
-        game: "",
-        gameState: {}
+        gameState: {game: "", state: {}}
     })
 
     interface SimplePlayerObject {
-        playerName: String;
-        playerID: String;
+        playerName: string;
+        playerID: string;
     }
 
-    function playersToPlayerNames(players: Array<SimplePlayerObject>): Array<String> {
+    function playersToPlayerNames(players: Array<SimplePlayerObject>): Array<string> {
         let arr = [];
         players.forEach((element) => {
             arr.push(element.playerName)
         })
         return arr;
     }
-
-
-    
-
 
 
     let result = "";
@@ -77,7 +77,7 @@
         game: "TicTacToe"
     }
 
-    async function sendGameRequest(game: String) {
+    async function sendGameRequest(game: string) {
         const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
 			method: 'POST',
 			body: JSON.stringify({ isStartRequest: true, game: game, turnInfo: {} }),
@@ -114,14 +114,13 @@
         hostID = lobbyInfo.host;
         if (String(playerID) == String(hostID)) isHost = true;
         getStream();
-        activeLobbyState.game = "InLobby";
+        activeLobbyState.gameState.game = "InLobby";
+        activeLobbyState.gameState.state = {};
         activeLobbyState.host = hostID;
         activeLobbyState.maxPlayers = lobbyInfo.maxPlayers;
         activeLobbyState.playerCount = lobbyInfo.playerCount;
         activeLobbyState.players = playersToPlayerNames(lobbyInfo.players);
     })
-    
-    
     
 </script>
 
@@ -144,7 +143,6 @@
                     switchCondition={true}
                     exportFunction={() => {}}
                 />
-                <input name="game" type="hidden" value={formInput.game}/>
                 <button onclick={async (e) => {
                     sendGameRequest("TicTacToe")
                 }}>Start Game</button>
@@ -153,7 +151,11 @@
             {/if}
         </div>
     {:else if !error}
-        Display Live Game info
+        {#if isGameRunning}
+            {#if game == "TicTacToe"}
+                <TicTacToe bind:gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
+            {/if}
+        {/if}
     {:else}
         <div>
             The lobby no longer exists. Please create a new lobby
