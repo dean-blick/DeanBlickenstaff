@@ -1,6 +1,6 @@
 import { testData } from "$lib/server/testData";
 import { ObjectId } from 'mongodb';
-import { Games } from "./Games"
+import { returnNewTicTacToeState, sendTicTacToeState } from "./Games/TicTacToe.js";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,6 +15,7 @@ interface StreamObject {
     controller: ReadableStreamDefaultController;
 }
 
+//player data does not need to exist, globalStreamMap can just be Map<string, Map<string, StreamObject>>
 interface PlayerData {
     playerID: string;
     streamObject: StreamObject;
@@ -53,7 +54,11 @@ function createReadableStream(lobbyID): StreamObject {
             //remove the playerIDs stream from the map using their lobby and playerID ----> TODO: Potentially just remove the one player and kick other players back to the lobby
             if(testData.findOne({"_id": ObjectId.createFromHexString(lobbyID)}) != null){
                 testData.deleteOne({"_id": ObjectId.createFromHexString(lobbyID)})
+                globalStateMap.delete(lobbyID)
+                globalStreamMap.delete(lobbyID)
+                simplePlayerIDs.delete(lobbyID)
             }
+            //clear maps!
             console.log("cancel and abort");
             ac.abort();
         },
@@ -167,90 +172,24 @@ export async function GET({params, cookies}): Promise<Response> {
     });
 }
 
-interface TicTacToeGameState {
-    yourMarker: string;
-    currentTurn: string;
-    board: Array<string>;
-}
 
 interface GameState {
     game: string;
     state: Object;
 }
 
-
-let simpleTurnIndex: Map<string, number> = new Map()
-
-
-function getTicTacToeNextTurn(lobbyID): string {
-    let index = simpleTurnIndex.get(lobbyID)
-    let lobbyPlayerTurnOrderArray = simplePlayerIDs.get(lobbyID)
-    let playerCount = lobbyPlayerTurnOrderArray.length;
-    let returnIndex;
-    if(index == playerCount - 1) {
-        returnIndex = 0;
-    } else {
-        returnIndex = index + 1;
-    }
-    let returnPlayerID = lobbyPlayerTurnOrderArray[returnIndex]
-    simpleTurnIndex.set(lobbyID, returnIndex)
-    return returnPlayerID
-}
-
 export async function POST({ request, cookies, params }) {
 	const { isStartRequest: isStartRequest, game: game, turnInfo: turnInfo } = await request.json();
-	const userid = cookies.get('userid');
     let lobbyID = params.id;
     let gameState: GameState = {
         game: "",
         state: {}
     }
-    if(isStartRequest){
-        if(game == "TicTacToe") {
-            simpleTurnIndex.set(lobbyID, 0)
-            gameState.game = "TicTacToe"
-
-            
-            let tictactoeGameState: TicTacToeGameState = {
-                yourMarker: "",
-                currentTurn: simplePlayerIDs.get(lobbyID)[0],
-                board: ["","","","","","","","",""]
-            }
-            gameState.state = tictactoeGameState;
-            let lobbyState: LobbyStateObject = await getLobbyState(lobbyID)
-            lobbyState.gameState = gameState;
-    
-            let markerIncrementer = 0;
-            globalStreamMap.get(lobbyID).forEach(element => {
-                if(markerIncrementer == 0) lobbyState.gameState.state['yourMarker'] = "x";
-                if(markerIncrementer == 1) lobbyState.gameState.state['yourMarker'] = "o";
-                element.streamObject.controller.enqueue(JSON.stringify(lobbyState))
-                markerIncrementer = 1;
-            });
-        }
-    }else {
-        if(game == "TicTacToe") {
-            let nextTicTurnPlayerID = getTicTacToeNextTurn(lobbyID)
-            gameState.game = "TicTacToe"
-            //process new turn of the game
-
-            let tictactoeGameState: TicTacToeGameState = {
-                yourMarker: "",
-                currentTurn: nextTicTurnPlayerID,
-                board: turnInfo
-            }
-            gameState.state = tictactoeGameState;
-            let lobbyState: LobbyStateObject = await getLobbyState(lobbyID)
-            lobbyState.gameState = gameState;
-
-            let markerIncrementer = 0;
-            globalStreamMap.get(lobbyID).forEach(element => {
-                if(markerIncrementer == 0) lobbyState.gameState.state['yourMarker'] = "x";
-                if(markerIncrementer == 1) lobbyState.gameState.state['yourMarker'] = "o";
-                element.streamObject.controller.enqueue(JSON.stringify(lobbyState))
-                markerIncrementer = 1;
-            });
-        }
+    if(game == "TicTacToe") {
+        let lobbyState: LobbyStateObject = await getLobbyState(lobbyID)
+        lobbyState.gameState.state = returnNewTicTacToeState(isStartRequest, lobbyID, turnInfo, simplePlayerIDs.get(lobbyID))
+        lobbyState.gameState.game = "TicTacToe"
+        sendTicTacToeState(lobbyState, globalStreamMap.get(lobbyID))
     }
 
 	return new Response("Success");
