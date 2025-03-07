@@ -14,16 +14,14 @@
 
     let { gameState = $bindable(), playerID, exportFunction } = $props<{gameState: GameState, playerID: string, exportFunction: Function}>()
 
-    let tictactoe: TicTacToeGameState = $state()
+    let tictactoe: TicTacToeGameState = $derived(gameState.state)
 
     let turn: boolean = $state();
 
-    let board: Array<string> = $state()
+    let board: Array<string> = $derived(tictactoe.board)
 
     $effect(() => {
-        tictactoe = gameState.state
         turn = (tictactoe.currentTurn == playerID)
-        board = tictactoe.board
         if(turn) {
             //quickly display some kind of turn notification
         }
@@ -39,41 +37,14 @@
 </script>
 
 <div class="flex flex-col h-full">
-    {#if turn}
-        <div class="flex flex-col h-1/2">
-            <div class="flex flex-row h-100">
-                <TicTacToeButton bind:value={board[0]} exportFunction={processInput} identifier={0} bind:enabled={turn}/>
-                <TicTacToeButton bind:value={board[1]} exportFunction={processInput} identifier={1} bind:enabled={turn}/>
-                <TicTacToeButton bind:value={board[2]} exportFunction={processInput} identifier={2} bind:enabled={turn}/>
-            </div>
-            <div class="flex flex-row">
-                <TicTacToeButton bind:value={board[3]} exportFunction={processInput} identifier={3} bind:enabled={turn}/>
-                <TicTacToeButton bind:value={board[4]} exportFunction={processInput} identifier={4} bind:enabled={turn}/>
-                <TicTacToeButton bind:value={board[5]} exportFunction={processInput} identifier={5} bind:enabled={turn}/>
-            </div>
-            <div class="flex flex-row">
-                <TicTacToeButton bind:value={board[6]} exportFunction={processInput} identifier={6} bind:enabled={turn}/>
-                <TicTacToeButton bind:value={board[7]} exportFunction={processInput} identifier={7} bind:enabled={turn}/>
-                <TicTacToeButton bind:value={board[8]} exportFunction={processInput} identifier={8} bind:enabled={turn}/>
-            </div>
+    <div class="flex flex-col h-1/2">
+        <div class="grid grid-rows-3 grid-cols-3">
+        {#each Array.from({length: 9}) as _, i}
+        <TicTacToeButton value={board[i]} exportFunction={processInput} identifier={i} enabled={turn}/>
+        {/each}
+        {#if turn}
+            <div>it is your turn bruh</div>
+        {/if}
         </div>
-    {:else}
-        <div class="flex flex-col">
-            <div class="flex flex-row">
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[0]}</div>
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[1]}</div>
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[2]}</div>
-            </div>
-            <div class="flex flex-row">
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[3]}</div>
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[4]}</div>
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[5]}</div>
-            </div>
-            <div class="flex flex-row">
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[6]}</div>
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[7]}</div>
-                <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">{board[8]}</div>
-            </div>
-        </div>
-    {/if}
+    </div>
 </div>
