@@ -90,21 +90,4 @@
             </div>
         </div>
     </WebProjectItem>
-    <!-- <div class="flex flex-col items-center">
-        <div class="flex flex-row">
-            <div class="py-4 px-7 text-black text-6xl bg-white border-2 border-black">x</div>
-            <div class="w-500 h-100 bg-white border-black">x</div>
-            <div class="w-500 h-100 bg-white border-black">x</div>
-        </div>
-        <div class="flex flex-row">
-            <div class="w-500 h-100 bg-white border-black">x</div>
-            <div class="w-500 h-100 bg-white border-black">x</div>
-            <div class="w-500 h-100 bg-white border-black">x</div>
-        </div>
-        <div class="flex flex-row">
-            <div class="w-100 h-100 bg-white border-black">x</div>
-            <div class="w-100 h-100 bg-white border-black">x</div>
-            <div class="w-100 h-100 bg-white border-black">x</div>
-        </div>
-    </div> -->
 </div>

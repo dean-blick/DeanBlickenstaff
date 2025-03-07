@@ -43,7 +43,7 @@
         <TicTacToeButton value={board[i]} exportFunction={processInput} identifier={i} enabled={turn}/>
         {/each}
         {#if turn}
-            <div>it is your turn bruh</div>
+            <div>it is your turn</div>
         {/if}
         </div>
     </div>

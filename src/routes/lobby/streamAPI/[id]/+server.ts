@@ -2,8 +2,6 @@ import { testData } from "$lib/server/testData";
 import { ObjectId } from 'mongodb';
 import { Games } from "./Games"
 
-
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
