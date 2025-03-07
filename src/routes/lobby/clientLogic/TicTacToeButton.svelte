@@ -7,4 +7,4 @@
     }
 </script>
 
-<button class="py-4 px-7 text-black text-6xl bg-white border-2 border-black" disabled={!enabled} class:cursor-not-allowed={!enabled} onclick={() => stepFunction(identifier)}>{value}</button>
+<button class="py-16 text-black text-4xl bg-gray-300 opacity-80 border-2 border-black box-border" disabled={!enabled} class:cursor-not-allowed={!enabled} onclick={() => stepFunction(identifier)}>{value}</button>
