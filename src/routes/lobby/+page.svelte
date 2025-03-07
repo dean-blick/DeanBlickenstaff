@@ -10,11 +10,13 @@
 
     let testData = $derived(data.testData)
 
-    let createLobbyName = $state("Lobby Name")
+    let createLobbyName = $state("")
 
-    let userName = $state("Player")
+    let userName = $state("")
 
     let isUsernameFilled = $derived(userName ? true : false)
+
+    let isLobbyFilled = $derived(createLobbyName ? true : false)
 
     let maxPlayers: number = $state(2)
 
@@ -51,7 +53,9 @@
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" name = "lobbyName" placeholder={"lobbyName"} bind:value={createLobbyName}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" name = "maxPlayers" placeholder={"Max Players"} bind:value={maxPlayers}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="checkbox" name = "isPublic" placeholder={"Public?"} bind:checked={isPublic}>
-            <button class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
+            <input type="hidden" name="playerName" value={userName}/>
+            <input type="hidden" name="playerID" value={data.playerID}/>
+            <button disabled={!createLobbyName || !isUsernameFilled} class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 disabled:bg-gray-600 disabled:hover:bg-gray-600 self-center"
                 onclick={() => {sleep(500).then(() => {JoinLobby(form.id)})}}>
                 Create Lobby
             </button>
@@ -71,7 +75,7 @@
                 <input type="hidden" name="lobbyId" value={d._id}/>
                 <input type="hidden" name="playerName" value={userName}/>
                 <input type="hidden" name="playerID" value={data.playerID}/>
-                <button disabled={userName == ""} class="ml-8 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
+                <button disabled={!isUsernameFilled} class="ml-8 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 disabled:bg-gray-600 disabled:hover:bg-gray-600 self-center"
                 onclick={() => {JoinLobby(d._id)}}>
                 Join Lobby
             </button>

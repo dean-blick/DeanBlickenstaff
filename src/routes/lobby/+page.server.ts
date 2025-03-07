@@ -25,7 +25,7 @@ type Data = {
 
 //get zod library for form validation
 
-async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host): Promise<string> {
+async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host, playerName): Promise<string> {
     try {
         let response = await testData.insertOne(
             {
@@ -33,7 +33,7 @@ async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host): Promise
                  "name": lobbyName,
                  "playerCount": 0,
                  "maxPlayers": Number(maxPlayers),
-                 "players": [],
+                 "players": [{"playerName": playerName, "playerID": host}],
                  "host": host,
                  "gameIsRunning": false
             }
@@ -51,14 +51,15 @@ export const actions: Actions = {
         const lobbyName = String(formData.get('lobbyName'))
         const maxPlayers = String(formData.get('maxPlayers'))
         const isPublic = String(formData.get('isPublic'))
-        const playerID = String(cookies.get('playerID'))
+        const playerID = String(formData.get('playerID'))
+        const playerName = String(formData.get('playerName'))
         //console.log(lobbyName)
     
         if(!lobbyName || !maxPlayers) {
             return { "success": false }
         }
     
-        let newId = await createLobbyRecord(lobbyName, maxPlayers, isPublic, playerID)
+        let newId = await createLobbyRecord(lobbyName, maxPlayers, isPublic, playerID, playerName)
         return { "success": true, "id": newId }
     },
     playerJoinRequest: async ({request}) => {
