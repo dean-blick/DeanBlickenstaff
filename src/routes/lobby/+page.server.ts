@@ -25,9 +25,9 @@ type Data = {
 
 //get zod library for form validation
 
-function createLobbyRecord(lobbyName, maxPlayers, isPublic, host) {
+async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host): Promise<string> {
     try {
-        testData.insertOne(
+        let response = await testData.insertOne(
             {
                 "public": isPublic,
                  "name": lobbyName,
@@ -38,8 +38,9 @@ function createLobbyRecord(lobbyName, maxPlayers, isPublic, host) {
                  "gameIsRunning": false
             }
         )
+        return response.insertedId.toString()
     } catch {
-        console.log("whoops")
+        return "Error: Document could not be added"
     }
     
 }
@@ -57,9 +58,8 @@ export const actions: Actions = {
             return { "success": false }
         }
     
-        createLobbyRecord(lobbyName, maxPlayers, isPublic, playerID)
-        
-        return { "success": true }
+        let newId = await createLobbyRecord(lobbyName, maxPlayers, isPublic, playerID)
+        return { "success": true, "id": newId }
     },
     playerJoinRequest: async ({request}) => {
         const formData = await request.formData()

@@ -36,8 +36,8 @@
     
 </script>
 
-<div class="flex flex-col h-full">
-    <div class="flex flex-col h-1/2 items-center">
+<div class="flex flex-col h-full items-center">
+    <div class="flex flex-col h-full w-[calc(var(--height))] items-center">
         <div class="grid grid-rows-3 grid-cols-3 w-1/3 mt-10">
         {#each Array.from({length: 9}) as _, i}
         <TicTacToeButton value={board[i]} exportFunction={processInput} identifier={i} enabled={turn}/>

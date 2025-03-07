@@ -3,6 +3,7 @@
     import type {PageData} from "./$types";
     import { enhance } from "$app/forms";
     import type { ActionData } from "./$types";
+    import { isLoading } from "../../stores/LoadingState.svelte.js";
 
     //This form object is like magical stuff that grabs the response from the post request.. very cool
     let { data, form }: { data: PageData, form: ActionData } = $props();
@@ -22,12 +23,14 @@
     //Thank you kirlich on stack overflow
 
     function sleep(ms) {
+        isLoading.value = true;
 		return new Promise((resolve) => setTimeout(resolve, ms))
 	}
 
     async function JoinLobby(id) {
         sleep(500).then(() => {
-            //console.log(form.success)
+            isLoading.value = false
+            console.log(form)
             if (form.success == true) {
                 goto(`/lobby/game/${id}`)
             } else {
@@ -36,6 +39,8 @@
         })
     }
 </script>
+
+
 
 <div class="flex flex-col">
     <div>
@@ -47,7 +52,7 @@
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" name = "maxPlayers" placeholder={"Max Players"} bind:value={maxPlayers}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="checkbox" name = "isPublic" placeholder={"Public?"} bind:checked={isPublic}>
             <button class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 self-center"
-                onclick={() => {}}>
+                onclick={() => {sleep(500).then(() => {JoinLobby(form.id)})}}>
                 Create Lobby
             </button>
         </form>

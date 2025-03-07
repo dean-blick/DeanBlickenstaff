@@ -37,7 +37,7 @@ export function returnNewTicTacToeState(isStartRequest, lobbyID, turnInfo, playe
         tictactoeGameState = {
             yourMarker: "",
             currentTurn: simplePlayerIDs.get(lobbyID)[0],
-            board: ["","","","","","","","",""]
+            board: [" "," "," "," "," "," "," "," "," "]
         }
     } else {
         let nextTicTurnPlayerID = getTicTacToeNextTurn(lobbyID)
