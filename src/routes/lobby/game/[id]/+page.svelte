@@ -1,17 +1,12 @@
 <script lang="ts">
-    import { navigating } from "$app/state";
     import { onMount } from "svelte";
     import type { PageData } from "./$types";
 	import Selector from "../../../../components/Selector.svelte"
-	import { enhance } from "$app/forms"
 	import TicTacToe from "../../clientLogic/TicTacToe.svelte"
     let { data }: { data: PageData} = $props();
 
-    let isGameRunning = $state(false);
     let isHost = $state(false);
     let playerID = $state('');
-    let hostID;
-    let game = "InLobby";
     let error = $state(false);
 
     interface LobbyStateObject {
@@ -68,13 +63,12 @@
             }
             if(value != undefined) parseLobbyUpdate(JSON.parse(value))
             console.log("resp", done, value);
-            if (done) break;
+            if (done) {
+                console.log("stream ending on client side")
+                break;
+            } 
             result += `${value}<br>`;
         }
-    }
-
-    let formInput = {
-        game: "TicTacToe"
     }
 
     async function sendGameRequest(game: string) {
@@ -111,22 +105,23 @@
             return;
         }
         playerID = data.playerID;
-        hostID = lobbyInfo.host;
-        if (String(playerID) == String(hostID)) isHost = true;
+        if (String(playerID) == String(lobbyInfo.host)) isHost = true;
         getStream();
         activeLobbyState.gameState.game = "InLobby";
         activeLobbyState.gameState.state = {};
-        activeLobbyState.host = hostID;
+        activeLobbyState.host = lobbyInfo.host;
         activeLobbyState.maxPlayers = lobbyInfo.maxPlayers;
         activeLobbyState.playerCount = lobbyInfo.playerCount;
         activeLobbyState.players = playersToPlayerNames(lobbyInfo.players);
+
     })
     
 </script>
 
 
-<div>
-    {#if !isGameRunning && !error}
+<div class="flex flex-col h-full">
+    
+    {#if activeLobbyState.gameState.game == "InLobby" && !error}
         <div class="flex flex-row">
             <div class="flex flex-col w-1/2">
                 <h>Players:</h>
@@ -151,15 +146,14 @@
             {/if}
         </div>
     {:else if !error}
-        {#if isGameRunning}
-            {#if game == "TicTacToe"}
-                <TicTacToe bind:gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
-            {/if}
+    <div class="flex flex-col h-full">
+        {#if activeLobbyState.gameState.game == "TicTacToe"}
+        <TicTacToe gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
         {/if}
+    </div>
     {:else}
         <div>
             The lobby no longer exists. Please create a new lobby
         </div>
     {/if}
-    
 </div>

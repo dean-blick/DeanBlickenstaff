@@ -181,7 +181,8 @@ interface GameState {
 }
 
 
-let simpleTurnIndex: Map<string, number>
+let simpleTurnIndex: Map<string, number> = new Map()
+
 
 function getTicTacToeNextTurn(lobbyID): string {
     let index = simpleTurnIndex.get(lobbyID)
@@ -202,9 +203,11 @@ export async function POST({ request, cookies, params }) {
 	const { isStartRequest: isStartRequest, game: game, turnInfo: turnInfo } = await request.json();
 	const userid = cookies.get('userid');
     let lobbyID = params.id;
+    let gameState: GameState = {
+        game: "",
+        state: {}
+    }
     if(isStartRequest){
-        let gameState: GameState;
-        
         if(game == "TicTacToe") {
             simpleTurnIndex.set(lobbyID, 0)
             gameState.game = "TicTacToe"
@@ -224,11 +227,32 @@ export async function POST({ request, cookies, params }) {
                 if(markerIncrementer == 0) lobbyState.gameState.state['yourMarker'] = "x";
                 if(markerIncrementer == 1) lobbyState.gameState.state['yourMarker'] = "o";
                 element.streamObject.controller.enqueue(JSON.stringify(lobbyState))
+                markerIncrementer = 1;
             });
         }
     }else {
-        let nextTicTurnPlayerID = getTicTacToeNextTurn(lobbyID)
-        //process new turn of the game
+        if(game == "TicTacToe") {
+            let nextTicTurnPlayerID = getTicTacToeNextTurn(lobbyID)
+            gameState.game = "TicTacToe"
+            //process new turn of the game
+
+            let tictactoeGameState: TicTacToeGameState = {
+                yourMarker: "",
+                currentTurn: nextTicTurnPlayerID,
+                board: turnInfo
+            }
+            gameState.state = tictactoeGameState;
+            let lobbyState: LobbyStateObject = await getLobbyState(lobbyID)
+            lobbyState.gameState = gameState;
+
+            let markerIncrementer = 0;
+            globalStreamMap.get(lobbyID).forEach(element => {
+                if(markerIncrementer == 0) lobbyState.gameState.state['yourMarker'] = "x";
+                if(markerIncrementer == 1) lobbyState.gameState.state['yourMarker'] = "o";
+                element.streamObject.controller.enqueue(JSON.stringify(lobbyState))
+                markerIncrementer = 1;
+            });
+        }
     }
 
 	return new Response("Success");

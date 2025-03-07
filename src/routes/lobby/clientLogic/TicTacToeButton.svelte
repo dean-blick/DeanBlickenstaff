@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { stringify } from "querystring"
 
     let {value = $bindable(), enabled = $bindable(), exportFunction, identifier} = $props<{value: string, enabled: boolean, exportFunction: Function, identifier: number}>()
 
@@ -8,4 +7,4 @@
     }
 </script>
 
-<button class="w-100 h-100 bg-white border-black" disabled={!enabled} onclick={() => stepFunction(identifier)}>{value}</button>
+<button class="py-4 px-7 text-black text-6xl bg-white border-2 border-black" disabled={!enabled} onclick={() => stepFunction(identifier)}>{value}</button>
