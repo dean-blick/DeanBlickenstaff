@@ -15,7 +15,7 @@ html {
 }
 
 @keyframes fade-out {
-    to {opactiy: 0;}
+    to {opacity: 0;}
 }
 
 @keyframes slide-to-left {
