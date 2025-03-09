@@ -187,6 +187,7 @@ export async function POST({ request, cookies, params }) {
     }
     if(game == "TicTacToe") {
         let lobbyState: LobbyStateObject = await getLobbyState(lobbyID)
+        console.log(simplePlayerIDs.get(lobbyID))
         lobbyState.gameState.state = returnNewTicTacToeState(isStartRequest, lobbyID, turnInfo, simplePlayerIDs.get(lobbyID))
         lobbyState.gameState.game = "TicTacToe"
         sendTicTacToeState(lobbyState, globalStreamMap.get(lobbyID))
