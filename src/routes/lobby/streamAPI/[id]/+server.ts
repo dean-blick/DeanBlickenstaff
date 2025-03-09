@@ -91,6 +91,7 @@ function updatePlayerMap(lobbyID, playerID): ReadableStream {
     let IDMap = simplePlayerIDs.get(lobbyID)
     IDMap.push(playerID)
     simplePlayerIDs.set(lobbyID, IDMap)
+    console.log("Assigned lobby player ID here: " + simplePlayerIDs.get(lobbyID))
 
     return streamObject.stream
 }
