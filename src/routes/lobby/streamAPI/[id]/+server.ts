@@ -183,6 +183,7 @@ interface GameState {
 export async function POST({ request, cookies, params }) {
 	const { isStartRequest: isStartRequest, game: game, turnInfo: turnInfo } = await request.json();
     let lobbyID = params.id;
+    console.log("Lobby ID request: " + lobbyID)
     let gameState: GameState = {
         game: "",
         state: {}
@@ -192,7 +193,6 @@ export async function POST({ request, cookies, params }) {
         console.log(simplePlayerIDs.get(lobbyID))
         lobbyState.gameState.state = returnNewTicTacToeState(isStartRequest, lobbyID, turnInfo, simplePlayerIDs.get(lobbyID))
         lobbyState.gameState.game = "TicTacToe"
-        console.log("Lobby ID request: " + lobbyID)
         sendTicTacToeState(lobbyState, globalStreamMap.get(lobbyID))
     }
 
