@@ -53,10 +53,11 @@ function createReadableStream(lobbyID): StreamObject {
         cancel() {
             //remove the playerIDs stream from the map using their lobby and playerID ----> TODO: Potentially just remove the one player and kick other players back to the lobby
             if(testData.findOne({"_id": ObjectId.createFromHexString(lobbyID)}) != null){
-                testData.deleteOne({"_id": ObjectId.createFromHexString(lobbyID)})
-                globalStateMap.delete(lobbyID)
-                globalStreamMap.delete(lobbyID)
-                simplePlayerIDs.delete(lobbyID)
+                testData.deleteOne({"_id": ObjectId.createFromHexString(lobbyID)}).then(() => {
+                    globalStateMap.delete(lobbyID)
+                    globalStreamMap.delete(lobbyID)
+                    simplePlayerIDs.delete(lobbyID)
+                })
             }
             //clear maps!
             console.log("cancel and abort");
@@ -191,6 +192,7 @@ export async function POST({ request, cookies, params }) {
         console.log(simplePlayerIDs.get(lobbyID))
         lobbyState.gameState.state = returnNewTicTacToeState(isStartRequest, lobbyID, turnInfo, simplePlayerIDs.get(lobbyID))
         lobbyState.gameState.game = "TicTacToe"
+        console.log("Lobby ID request: " + lobbyID)
         sendTicTacToeState(lobbyState, globalStreamMap.get(lobbyID))
     }
 
