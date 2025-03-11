@@ -52,13 +52,13 @@ function createReadableStream(lobbyID): StreamObject {
         },
         cancel() {
             //remove the playerIDs stream from the map using their lobby and playerID ----> TODO: Potentially just remove the one player and kick other players back to the lobby
-            if(testData.findOne({"_id": ObjectId.createFromHexString(lobbyID)}) != null){
-                testData.deleteOne({"_id": ObjectId.createFromHexString(lobbyID)}).then(() => {
-                    globalStateMap.delete(lobbyID)
-                    globalStreamMap.delete(lobbyID)
-                    simplePlayerIDs.delete(lobbyID)
-                })
-            }
+            // if(testData.findOne({"_id": ObjectId.createFromHexString(lobbyID)}) != null){
+            //     testData.deleteOne({"_id": ObjectId.createFromHexString(lobbyID)}).then(() => {
+            //         globalStateMap.delete(lobbyID)
+            //         globalStreamMap.delete(lobbyID)
+            //         simplePlayerIDs.delete(lobbyID)
+            //     })
+            // }
             //clear maps!
             console.log("cancel and abort");
             ac.abort();
@@ -184,7 +184,7 @@ export async function POST({ request, cookies, params }) {
 	const { isStartRequest: isStartRequest, game: game, turnInfo: turnInfo } = await request.json();
     let lobbyID = params.id;
     console.log("Lobby ID request: " + lobbyID)
-    console.log("Entire simple player map: " + simplePlayerIDs)
+    console.log("Entire simple player map: " + simplePlayerIDs.get(lobbyID))
     let gameState: GameState = {
         game: "",
         state: {}
