@@ -68,7 +68,7 @@ function createReadableStream(lobbyID): StreamObject {
     return streamObject
 }
 
-function updatePlayerMap(lobbyID, playerID): ReadableStream {
+async function updatePlayerMap(lobbyID, playerID): Promise<ReadableStream> {
     let streamObject: StreamObject = createReadableStream(lobbyID);
     let playerMap: Map<string, PlayerData>
     if(globalStreamMap.has(lobbyID)) {
@@ -92,7 +92,7 @@ function updatePlayerMap(lobbyID, playerID): ReadableStream {
     let IDMap = simplePlayerIDs.get(lobbyID)
     IDMap.push(playerID)
     simplePlayerIDs.set(lobbyID, IDMap)
-    console.log("Assigned lobby player ID here: " + simplePlayerIDs.get(lobbyID))
+    console.log("Assigned lobbby: " + lobbyID + " player: " + simplePlayerIDs.get(lobbyID))
 
     return streamObject.stream
 }
@@ -156,7 +156,7 @@ export async function GET({params, cookies}): Promise<Response> {
 
     //Get the players stream and the state of the lobby they are joining
     await refreshLobbyStateDBInfo(lobbyID)
-    let stream: ReadableStream = updatePlayerMap(lobbyID, playerID)
+    let stream: ReadableStream = await updatePlayerMap(lobbyID, playerID)
     let lobbyState: LobbyStateObject = await getLobbyState(lobbyID)
 
     //Send the updated state to each player in the lobby
@@ -184,6 +184,7 @@ export async function POST({ request, cookies, params }) {
 	const { isStartRequest: isStartRequest, game: game, turnInfo: turnInfo } = await request.json();
     let lobbyID = params.id;
     console.log("Lobby ID request: " + lobbyID)
+    console.log("Entire simple player map: " + simplePlayerIDs)
     let gameState: GameState = {
         game: "",
         state: {}
