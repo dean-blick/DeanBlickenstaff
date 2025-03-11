@@ -98,6 +98,7 @@ async function updatePlayerMap(lobbyID, playerID): Promise<ReadableStream> {
 }
 
 async function getLobbyState(lobbyID): Promise<LobbyStateObject> {
+    console.log("Server has lobby state: " + globalStateMap.has(lobbyID))
     if(globalStateMap.has(lobbyID)){
         return globalStateMap.get(lobbyID);
     }else{
