@@ -44,33 +44,6 @@
         return arr;
     }
 
-
-    let result = "";
-    async function getStream() {
-        const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "text/event-stream",
-            },
-        });
-        const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
-        while (true) {
-            const { value, done } = await reader.read();
-            console.log(value)
-            if(value.includes("error")) {
-                error = true;
-                break;
-            }
-            if(value != undefined) parseLobbyUpdate(JSON.parse(value))
-            console.log("resp", done, value);
-            if (done) {
-                console.log("stream ending on client side")
-                break;
-            } 
-            result += `${value}<br>`;
-        }
-    }
-
     async function sendGameRequest(game: string) {
         const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
 			method: 'POST',
@@ -91,11 +64,6 @@
 		});
     }
 
-    function parseLobbyUpdate(newLobbyState: LobbyStateObject) {
-        console.log('parsing lobby')
-        activeLobbyState = newLobbyState
-    }
-
     //get new players in an updated lobbyInfo object from the stream
 
     onMount(async () => {
@@ -106,7 +74,6 @@
         }
         playerID = data.playerID;
         if (String(playerID) == String(lobbyInfo.host)) isHost = true;
-        getStream();
         activeLobbyState.gameState.game = "InLobby";
         activeLobbyState.gameState.state = {};
         activeLobbyState.host = lobbyInfo.host;
@@ -114,6 +81,8 @@
         activeLobbyState.playerCount = lobbyInfo.playerCount;
         activeLobbyState.players = playersToPlayerNames(lobbyInfo.players);
 
+
+        //create get loop to update the state
     })
     
 </script>
