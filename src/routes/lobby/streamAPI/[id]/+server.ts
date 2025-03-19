@@ -80,12 +80,12 @@ export async function POST({ request, cookies, params }) {
         game: "",
         state: {}
     }
-    if(game == "TicTacToe") {
-        const data = (await testData.find({"_id": ObjectId.createFromHexString(lobbyID)}).toArray()).map(testData => ({
-            ...testData
-        }))
-        let lobbyState = data[0];
-        if(!Object.keys(lobbyState.gameState).length || cookies.get("playerID") == lobbyState.gameState.currentTurn) {
+    const data = (await testData.find({"_id": ObjectId.createFromHexString(lobbyID)}).toArray()).map(testData => ({
+        ...testData
+    }))
+    let lobbyState = data[0];
+    if(game == "TicTacToe" && lobbyState.players.length == 2) {
+        if(lobbyState.gameState.game == "InLobby" || cookies.get("playerID") == lobbyState.gameState.state.currentTurn) {
             await updateTicTacToeGameState(lobbyID, turnInfo, cookies.get("playerID"), isStartRequest, lobbyState)
         }
     }

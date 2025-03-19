@@ -7,7 +7,7 @@
     }
 
     interface TicTacToeGameState {
-        yourMarker: string;
+        markers: {};
         currentTurn: string;
         board: Array<string>;
     }
@@ -20,6 +20,8 @@
 
     let board: Array<string> = $derived(tictactoe.board)
 
+    let marker: string = $derived(tictactoe.markers[playerID]);
+
     $effect(() => {
         turn = (tictactoe.currentTurn == playerID)
         if(turn) {
@@ -28,7 +30,7 @@
     })
 
     function processInput(identifier) {
-        board[identifier] = tictactoe.yourMarker;
+        board[identifier] = marker;
         turn = false;
         tictactoe.currentTurn = "";
         exportFunction("TicTacToe", board)

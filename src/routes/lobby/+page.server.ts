@@ -36,7 +36,7 @@ async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host, playerNa
                  "players": [{"playerName": playerName, "playerID": host}],
                  "host": host,
                  "gameIsRunning": false,
-                 "gameState": {}
+                 "gameState": {game: "InLobby", state: {}}
             }
         )
         return response.insertedId.toString()

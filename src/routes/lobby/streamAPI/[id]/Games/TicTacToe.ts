@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import test from "node:test";
 
 interface TicTacToeGameState {
-    yourMarker: string;
+    markers: {};
     currentTurn: string;
     board: Array<string>;
 }
@@ -11,6 +11,11 @@ interface TicTacToeGameState {
 interface SimplePlayerObject {
     playerName: string;
     playerID: string;
+}
+
+interface GameState {
+    game: string;
+    state: Object;
 }
 
 function playersToPlayerIDs(players: Array<SimplePlayerObject>): Array<string> {
@@ -29,33 +34,27 @@ function getNextPlayerID(players: Array<string>, currentID) {
     return players[index]
 }
 
-export async function updateTicTacToeGameState(lobbyID, turnInfo, playerID, isStartRequest, lobbyState): Promise<TicTacToeGameState> {
+export async function updateTicTacToeGameState(lobbyID, turnInfo, playerID, isStartRequest, lobbyState): Promise<void> {
     let tictactoeGameState: TicTacToeGameState
     
     let players = playersToPlayerIDs(lobbyState.players)
-    if(lobbyState == null){
-        return {
-            yourMarker: "",
-            currentTurn: "",
-            board: [" "," "," "," "," "," "," "," "," "]
-        }
-    }
     if (isStartRequest) {
         tictactoeGameState = {
-            yourMarker: "",
-            currentTurn: lobbyState.players[0].playerID,
+            markers: {[players[0]]: "x", [players[1]]: "o"},
+            currentTurn: players[0],
             board: [" "," "," "," "," "," "," "," "," "]
         }
-        await testData.updateOne({"_id": ObjectId.createFromHexString(lobbyID)}, {$set:{"gameState": tictactoeGameState}})
+        let state: GameState = {game: "TicTacToe", state: tictactoeGameState}
+        await testData.updateOne({"_id": ObjectId.createFromHexString(lobbyID)}, {$set:{"gameState": state}})
     } else {
-        let nextTicTurnPlayerID = getNextPlayerID(players, lobbyState.gameState.currentTurn)
+        let nextTicTurnPlayerID = getNextPlayerID(players, lobbyState.gameState.state.currentTurn)
         tictactoeGameState = {
-            yourMarker: "",
+            markers: {[players[0]]: "x", [players[1]]: "o"},
             currentTurn: nextTicTurnPlayerID,
             board: turnInfo
         }
-        await testData.updateOne({"_id": ObjectId.createFromHexString(lobbyID)}, {$set:{"gameState": tictactoeGameState}})
+        let state: GameState = {game: "TicTacToe", state: tictactoeGameState}
+        await testData.updateOne({"_id": ObjectId.createFromHexString(lobbyID)}, {$set:{"gameState": state}})
     }
-    return tictactoeGameState
 }
 

@@ -55,6 +55,7 @@
     }
 
     async function sendGameTurn(game, turnInfo) {
+        console.log("game: " + game)
         const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
 			method: 'POST',
 			body: JSON.stringify({ isStartRequest: false, game: game, turnInfo: turnInfo }),
@@ -64,7 +65,12 @@
 		});
     }
 
-    //get new players in an updated lobbyInfo object from the stream
+    async function getLobbyData() {
+        let response = await fetch(`../streamAPI/${location.href.split('/')[5]}`)
+        activeLobbyState = await response.json()
+        console.log(activeLobbyState)
+        setTimeout(getLobbyData, 2000)
+    }
 
     onMount(async () => {
         let lobbyInfo = data.testData[0];
@@ -81,7 +87,7 @@
         activeLobbyState.playerCount = lobbyInfo.playerCount;
         activeLobbyState.players = playersToPlayerNames(lobbyInfo.players);
 
-
+        getLobbyData()
         //create get loop to update the state
     })
     
