@@ -88,47 +88,52 @@
         activeLobbyState.players = playersToPlayerNames(lobbyInfo.players);
 
         getLobbyData()
-        //create get loop to update the state
     })
     
 </script>
 
-
-<div class="flex flex-col h-full">
+<div class="flex flex-col top-0 absolute p-10 pt-20 w-60 bg-slate-900 h-full">
+    <h class="mb-2">Players:</h>
+    {#each activeLobbyState.players as player}
+        <div class="self-center w-24 text-center rounded-xl my-2 bg-slate-800">
+            {player}
+        </div>
+    {/each}
+    {#if activeLobbyState.gameState.game != "InLobby" && isHost == true}
+        <button aria-label="back to lobby button" class="bg-backgroundBlue rounded-xl w-40 mt-2 self-center" onclick={async (e) => {sendGameRequest("InLobby")}}>Back to lobby</button>
+    {/if}
     
-    {#if activeLobbyState.gameState.game == "InLobby" && !error}
-        <div class="flex flex-row">
-            <div class="flex flex-col w-1/2">
-                <h>Players:</h>
-                {#each activeLobbyState.players as player}
-                    <div>
-                        {player}
-                    </div>
-                {/each}
+</div>
+<div class="flex flex-row h-screen justify-center">
+    
+    <div class="flex flex-col h-2/3 justify-center">
+        
+        {#if activeLobbyState.gameState.game == "InLobby" && !error}
+            <div class="flex flex-row left-20">
+                {#if isHost}
+                <div class="flex flex-col">
+                    <Selector
+                        options={["TicTacToe"]}
+                        switchCondition={true}
+                        exportFunction={() => {}}
+                    />
+                    <button onclick={async (e) => {
+                        sendGameRequest("TicTacToe")
+                    }}>Start Game</button>
+                </div>
+                
+                {/if}
             </div>
-            {#if isHost}
-            <div class="flex flex-col">
-                <Selector
-                    options={["TicTacToe"]}
-                    switchCondition={true}
-                    exportFunction={() => {}}
-                />
-                <button onclick={async (e) => {
-                    sendGameRequest("TicTacToe")
-                }}>Start Game</button>
-            </div>
-            
+        {:else if !error}
+        <div class="flex flex-col h-full">
+            {#if activeLobbyState.gameState.game == "TicTacToe"}
+            <TicTacToe gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
             {/if}
         </div>
-    {:else if !error}
-    <div class="flex flex-col h-full">
-        {#if activeLobbyState.gameState.game == "TicTacToe"}
-        <TicTacToe gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
+        {:else}
+            <div>
+                The lobby no longer exists. Please create a new lobby
+            </div>
         {/if}
     </div>
-    {:else}
-        <div>
-            The lobby no longer exists. Please create a new lobby
-        </div>
-    {/if}
 </div>

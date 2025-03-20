@@ -40,7 +40,7 @@
 
 
 
-<div class="flex flex-col">
+<div class="flex flex-col max-w-[1400px] self-center">
     <div>
         <input class="my-4 bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" placeholder={"Username"} bind:value={userName}>
     </div>
@@ -48,6 +48,7 @@
         <form method="POST" action="?/addLobbyDocument" use:enhance>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" name = "lobbyName" placeholder={"lobbyName"} bind:value={createLobbyName}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" name = "maxPlayers" placeholder={"Max Players"} bind:value={maxPlayers}>
+            Make lobby public?
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="checkbox" name = "isPublic" placeholder={"Public?"} bind:checked={isPublic}>
             <input type="hidden" name="playerName" value={userName}/>
             <input type="hidden" name="playerID" value={data.playerID}/>
@@ -58,7 +59,7 @@
         </form>
     </div>
     {#each testData as d}
-        <div class="flex flex-row mt-2">
+        <div class="flex flex-row mt-2 rounded-lg bg-gray-900 p-4 mt-8 justify-between">
             <article>
                 <h2>{d.name}</h2>
                 <h3 class="pl-8">Players:

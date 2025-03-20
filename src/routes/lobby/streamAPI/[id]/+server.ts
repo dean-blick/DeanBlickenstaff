@@ -1,8 +1,6 @@
 import { testData } from "$lib/server/testData";
 import { ObjectId } from 'mongodb';
-import type { WithId } from "mongodb";
 import { updateTicTacToeGameState } from "./Games/TicTacToe.js";
-import TicTacToe from "../../clientLogic/TicTacToe.svelte";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -88,6 +86,10 @@ export async function POST({ request, cookies, params }) {
         if(lobbyState.gameState.game == "InLobby" || cookies.get("playerID") == lobbyState.gameState.state.currentTurn) {
             await updateTicTacToeGameState(lobbyID, turnInfo, cookies.get("playerID"), isStartRequest, lobbyState)
         }
+    } else if (game == "InLobby") {
+        gameState.game = "InLobby"
+        gameState.state = {}
+        await testData.updateOne({"_id": ObjectId.createFromHexString(lobbyID)}, {$set:{"gameState": gameState}})
     }
 
 	return new Response("Success");
