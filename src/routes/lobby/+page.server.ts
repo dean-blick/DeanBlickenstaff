@@ -23,9 +23,12 @@ type Data = {
     errors: Record<string, string>
 }
 
-//get zod library for form validation
 
 async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host, playerName): Promise<string> {
+
+    //get all records with this host and delete them
+
+
     try {
         let response = await testData.insertOne(
             {

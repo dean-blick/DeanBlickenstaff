@@ -55,7 +55,7 @@
     }
 
     async function sendGameTurn(game, turnInfo) {
-        console.log("game: " + game)
+        //console.log("game: " + game)
         const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
 			method: 'POST',
 			body: JSON.stringify({ isStartRequest: false, game: game, turnInfo: turnInfo }),
@@ -68,8 +68,8 @@
     async function getLobbyData() {
         let response = await fetch(`../streamAPI/${location.href.split('/')[5]}`)
         activeLobbyState = await response.json()
-        console.log(activeLobbyState)
-        setTimeout(getLobbyData, 2000)
+        //console.log(activeLobbyState)
+        setTimeout(getLobbyData, 1000)
     }
 
     onMount(async () => {
