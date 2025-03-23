@@ -24,7 +24,7 @@
             </a>
             -->
         </div>
-        <div class="relative shadow-2xl grid place-items-center">
+        <div class="relative grid place-items-center">
             <!-- <img src={"images/image.png"} alt="Image" class="object-cover z-[2] max-h-[70vh]"/> -->
         </div>
     </section>
