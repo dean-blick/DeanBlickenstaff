@@ -28,16 +28,7 @@
     async function JoinLobby(id, attempts) {
         await sleep(250).then(async () => {
             isLoading.value = false
-            console.log(form)
-            if (form.success == true) {
-                goto(`/lobby/game/${id}`)
-            } else {
-                if (attempts < 25) {
-                    await sleep(250).then(() => {
-                        JoinLobby(id, attempts + 1)
-                    })
-                }
-            }
+            goto(`/lobby/game/${id}`)
         })
     }
 </script>
