@@ -44,33 +44,6 @@
         return arr;
     }
 
-
-    let result = "";
-    async function getStream() {
-        const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "text/event-stream",
-            },
-        });
-        const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
-        while (true) {
-            const { value, done } = await reader.read();
-            console.log(value)
-            if(value.includes("error")) {
-                error = true;
-                break;
-            }
-            if(value != undefined) parseLobbyUpdate(JSON.parse(value))
-            console.log("resp", done, value);
-            if (done) {
-                console.log("stream ending on client side")
-                break;
-            } 
-            result += `${value}<br>`;
-        }
-    }
-
     async function sendGameRequest(game: string) {
         const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
 			method: 'POST',
@@ -82,6 +55,7 @@
     }
 
     async function sendGameTurn(game, turnInfo) {
+        //console.log("game: " + game)
         const response = await fetch(`../streamAPI/${location.href.split('/')[5]}`, {
 			method: 'POST',
 			body: JSON.stringify({ isStartRequest: false, game: game, turnInfo: turnInfo }),
@@ -91,12 +65,12 @@
 		});
     }
 
-    function parseLobbyUpdate(newLobbyState: LobbyStateObject) {
-        console.log('parsing lobby')
-        activeLobbyState = newLobbyState
+    async function getLobbyData() {
+        let response = await fetch(`../streamAPI/${location.href.split('/')[5]}`)
+        activeLobbyState = await response.json()
+        //console.log(activeLobbyState)
+        setTimeout(getLobbyData, 1000)
     }
-
-    //get new players in an updated lobbyInfo object from the stream
 
     onMount(async () => {
         let lobbyInfo = data.testData[0];
@@ -106,7 +80,6 @@
         }
         playerID = data.playerID;
         if (String(playerID) == String(lobbyInfo.host)) isHost = true;
-        getStream();
         activeLobbyState.gameState.game = "InLobby";
         activeLobbyState.gameState.state = {};
         activeLobbyState.host = lobbyInfo.host;
@@ -114,46 +87,53 @@
         activeLobbyState.playerCount = lobbyInfo.playerCount;
         activeLobbyState.players = playersToPlayerNames(lobbyInfo.players);
 
+        getLobbyData()
     })
     
 </script>
 
-
-<div class="flex flex-col h-full">
+<div class="flex flex-col top-0 absolute p-10 pt-20 w-60 bg-slate-900 h-full">
+    <h class="mb-2">Players:</h>
+    {#each activeLobbyState.players as player}
+        <div class="self-center w-24 text-center rounded-xl my-2 bg-slate-800">
+            {player}
+        </div>
+    {/each}
+    {#if activeLobbyState.gameState.game != "InLobby" && isHost == true}
+        <button aria-label="back to lobby button" class="bg-backgroundBlue rounded-xl w-40 mt-2 self-center" onclick={async (e) => {sendGameRequest("InLobby")}}>Back to lobby</button>
+    {/if}
     
-    {#if activeLobbyState.gameState.game == "InLobby" && !error}
-        <div class="flex flex-row">
-            <div class="flex flex-col w-1/2">
-                <h>Players:</h>
-                {#each activeLobbyState.players as player}
-                    <div>
-                        {player}
-                    </div>
-                {/each}
+</div>
+<div class="flex flex-row h-screen justify-center">
+    
+    <div class="flex flex-col h-2/3 justify-center">
+        
+        {#if activeLobbyState.gameState.game == "InLobby" && !error}
+            <div class="flex flex-row left-20">
+                {#if isHost}
+                <div class="flex flex-col">
+                    <Selector
+                        options={["TicTacToe"]}
+                        switchCondition={true}
+                        exportFunction={() => {}}
+                    />
+                    <button onclick={async (e) => {
+                        sendGameRequest("TicTacToe")
+                    }}>Start Game</button>
+                </div>
+                
+                {/if}
             </div>
-            {#if isHost}
-            <div class="flex flex-col">
-                <Selector
-                    options={["TicTacToe"]}
-                    switchCondition={true}
-                    exportFunction={() => {}}
-                />
-                <button onclick={async (e) => {
-                    sendGameRequest("TicTacToe")
-                }}>Start Game</button>
-            </div>
-            
+        {:else if !error}
+        <div class="flex flex-col h-full">
+            {#if activeLobbyState.gameState.game == "TicTacToe"}
+            <TicTacToe gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
             {/if}
         </div>
-    {:else if !error}
-    <div class="flex flex-col h-full">
-        {#if activeLobbyState.gameState.game == "TicTacToe"}
-        <TicTacToe gameState = {activeLobbyState.gameState} playerID={playerID} exportFunction={sendGameTurn}/>
+        {:else}
+            <div>
+                The lobby no longer exists. Please create a new lobby
+            </div>
         {/if}
     </div>
-    {:else}
-        <div>
-            The lobby no longer exists. Please create a new lobby
-        </div>
-    {/if}
 </div>

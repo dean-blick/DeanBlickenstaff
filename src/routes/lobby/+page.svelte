@@ -25,14 +25,16 @@
 		return new Promise((resolve) => setTimeout(resolve, ms))
 	}
 
-    async function JoinLobby(id) {
-        sleep(500).then(() => {
+    async function JoinLobby(id, attempts) {
+        await sleep(250).then(() => {
             isLoading.value = false
             console.log(form)
             if (form.success == true) {
                 goto(`/lobby/game/${id}`)
             } else {
-                console.log("Join Error")
+                if (attempts < 20) {
+                    JoinLobby(id, attempts + 1)
+                }
             }
         })
     }
@@ -40,7 +42,7 @@
 
 
 
-<div class="flex flex-col">
+<div class="flex flex-col max-w-[1400px] self-center">
     <div>
         <input class="my-4 bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" placeholder={"Username"} bind:value={userName}>
     </div>
@@ -48,17 +50,18 @@
         <form method="POST" action="?/addLobbyDocument" use:enhance>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="text" name = "lobbyName" placeholder={"lobbyName"} bind:value={createLobbyName}>
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="number" name = "maxPlayers" placeholder={"Max Players"} bind:value={maxPlayers}>
+            Make lobby public?
             <input class="bg-dark-400 rounded-lg border-dark-100 border-1 mx-2 px-2 text-black" type="checkbox" name = "isPublic" placeholder={"Public?"} bind:checked={isPublic}>
             <input type="hidden" name="playerName" value={userName}/>
             <input type="hidden" name="playerID" value={data.playerID}/>
             <button disabled={!createLobbyName || !userName} class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 disabled:bg-gray-600 disabled:hover:bg-gray-600 self-center"
-                onclick={() => {sleep(500).then(() => {JoinLobby(form.id)})}}>
+                onclick={() => {sleep(500).then(() => {JoinLobby(form.id, 0)})}}>
                 Create Lobby
             </button>
         </form>
     </div>
     {#each testData as d}
-        <div class="flex flex-row mt-2">
+        <div class="flex flex-row mt-2 rounded-lg bg-gray-900 p-4 justify-between">
             <article>
                 <h2>{d.name}</h2>
                 <h3 class="pl-8">Players:
@@ -72,7 +75,7 @@
                 <input type="hidden" name="playerName" value={userName}/>
                 <input type="hidden" name="playerID" value={data.playerID}/>
                 <button disabled={!userName} class="ml-8 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 disabled:bg-gray-600 disabled:hover:bg-gray-600 self-center"
-                onclick={() => {JoinLobby(d._id)}}>
+                onclick={() => {JoinLobby(d._id, 0)}}>
                 Join Lobby
             </button>
             </form>

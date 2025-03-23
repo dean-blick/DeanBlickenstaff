@@ -9,7 +9,7 @@
 
 </script>
 
-<header class={'sticky z-[10] top-0 duration-200 px-6 flex items-center justify-between border border-solid ' + (y > 0 ? 'py-4 bg-slate-950 border-blue-950' : 'py-6 bg-transparent border-transparent')}>
+<header class={'sticky z-[10] max-w-[1400px] lg:left-60 top-0 duration-200 px-6 flex items-center justify-between border border-solid ' + (y > 0 ? 'py-4 bg-slate-950 border-blue-950' : 'py-6 bg-transparent border-transparent')}>
     <a href="/">
         <b class="font-bold poppins">Dean</b> Blickenstaff
     </a>

@@ -23,9 +23,12 @@ type Data = {
     errors: Record<string, string>
 }
 
-//get zod library for form validation
 
 async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host, playerName): Promise<string> {
+
+    //get all records with this host and delete them
+
+
     try {
         let response = await testData.insertOne(
             {
@@ -35,7 +38,8 @@ async function createLobbyRecord(lobbyName, maxPlayers, isPublic, host, playerNa
                  "maxPlayers": Number(maxPlayers),
                  "players": [{"playerName": playerName, "playerID": host}],
                  "host": host,
-                 "gameIsRunning": false
+                 "gameIsRunning": false,
+                 "gameState": {game: "InLobby", state: {}}
             }
         )
         return response.insertedId.toString()
@@ -81,9 +85,15 @@ export const actions: Actions = {
         //Update the lobby to add the player
         let playerList = lobby[0].players
         playerList.push({"playerName": playerName, "playerID": playerID})
+
+        let isPublic = lobby[0].public
+        if(playerList.length == lobby[0].maxPlayers) {
+            isPublic = "off"
+        }
+
         testData.updateOne(
             {"_id": ObjectId.createFromHexString(id)},
-            { $set: { "playerCount": lobby[0].playerCount + 1, "players": playerList}}
+            { $set: { "playerCount": lobby[0].playerCount + 1, "players": playerList, "public": isPublic}}
         )
         return {"success": true}
         //either delete and reinsert the lobby document or find a method to update the existing document
