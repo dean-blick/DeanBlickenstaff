@@ -25,14 +25,16 @@
 		return new Promise((resolve) => setTimeout(resolve, ms))
 	}
 
-    async function JoinLobby(id) {
-        sleep(500).then(() => {
+    async function JoinLobby(id, attempts) {
+        await sleep(250).then(() => {
             isLoading.value = false
             console.log(form)
             if (form.success == true) {
                 goto(`/lobby/game/${id}`)
             } else {
-                console.log("Join Error")
+                if (attempts < 20) {
+                    JoinLobby(id, attempts + 1)
+                }
             }
         })
     }
@@ -53,13 +55,13 @@
             <input type="hidden" name="playerName" value={userName}/>
             <input type="hidden" name="playerID" value={data.playerID}/>
             <button disabled={!createLobbyName || !userName} class="ml-8 customShadow relative overflow-hidden px-5 py-2 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 disabled:bg-gray-600 disabled:hover:bg-gray-600 self-center"
-                onclick={() => {sleep(500).then(() => {JoinLobby(form.id)})}}>
+                onclick={() => {sleep(500).then(() => {JoinLobby(form.id, 0)})}}>
                 Create Lobby
             </button>
         </form>
     </div>
     {#each testData as d}
-        <div class="flex flex-row mt-2 rounded-lg bg-gray-900 p-4 mt-8 justify-between">
+        <div class="flex flex-row mt-2 rounded-lg bg-gray-900 p-4 justify-between">
             <article>
                 <h2>{d.name}</h2>
                 <h3 class="pl-8">Players:
@@ -73,7 +75,7 @@
                 <input type="hidden" name="playerName" value={userName}/>
                 <input type="hidden" name="playerID" value={data.playerID}/>
                 <button disabled={!userName} class="ml-8 customShadow relative overflow-hidden px-5 py-2 mt-6 group rounded-full bg-white text-slate-950 transition hover:bg-blue-500 disabled:bg-gray-600 disabled:hover:bg-gray-600 self-center"
-                onclick={() => {JoinLobby(d._id)}}>
+                onclick={() => {JoinLobby(d._id, 0)}}>
                 Join Lobby
             </button>
             </form>
