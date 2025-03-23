@@ -32,7 +32,7 @@
             if (form.success == true) {
                 goto(`/lobby/game/${id}`)
             } else {
-                if (attempts < 20) {
+                if (attempts < 50) {
                     JoinLobby(id, attempts + 1)
                 }
             }

@@ -74,8 +74,6 @@ interface GameState {
 export async function POST({ request, cookies, params }) {
 	const { isStartRequest: isStartRequest, game: game, turnInfo: turnInfo } = await request.json();
     let lobbyID = params.id;
-    console.log("Lobby ID request: " + lobbyID)
-    console.log("Entire simple player map: " + simplePlayerIDs.get(lobbyID))
     let gameState: GameState = {
         game: "",
         state: {}
